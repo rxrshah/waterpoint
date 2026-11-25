@@ -329,3 +329,18 @@ body::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-even
 .login-mark { width: 64px; height: 64px; border-radius: 20px; margin: 0 auto 16px; display: grid; place-items: center; background: linear-gradient(135deg, var(--cyan), var(--emerald)); color: #04211f; box-shadow: 0 10px 30px rgba(34, 211, 238, .3); }
 .login-hint { margin-top: 20px; padding: 10px 12px; border-radius: 12px; background: var(--info-soft); color: var(--text-2); font-size: 12.5px; border: 1px dashed color-mix(in srgb, var(--info) 40%, transparent); }
 .hero-stats { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; } .pill { display: inline-flex; gap: 7px; align-items: center; padding: 6px 12px; border-radius: 999px; background: color-mix(in srgb, var(--bg) 55%, transparent); border: 1px solid var(--line-2); font-size: 12.5px; font-weight: 600; backdrop-filter: blur(6px); } .pill i { width: 8px; height: 8px; border-radius: 50%; }
+
+/* ---- campus map ---- */
+.map { position: relative; overflow: hidden; border-radius: var(--r-lg); border: 1px solid var(--line-2); background: #cfe6ef; touch-action: none; cursor: grab; box-shadow: var(--shadow); outline-offset: 3px; } .map:active { cursor: grabbing; }
+:root[data-theme='dark'] .map { background: #10202f; }
+.map-tiles { position: absolute; inset: 0; } .tile-img { position: absolute; width: 256px; height: 256px; user-select: none; pointer-events: none; }
+:root[data-theme='dark'] .tile-img { filter: invert(1) hue-rotate(180deg) brightness(.92) contrast(.88) saturate(.8); }
+.mk { position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50% 50% 50% 8px; transform: rotate(-45deg); border: 2.5px solid #fff; display: grid; place-items: center; cursor: pointer; color: #fff; box-shadow: 0 4px 12px rgba(0, 0, 0, .4); transition: transform .15s; padding: 0; }
+.mk .icon { transform: rotate(45deg); } .mk:hover, .mk.sel { transform: rotate(-45deg) scale(1.25); } .mk.sel { box-shadow: 0 0 0 5px rgba(34, 211, 238, .45), 0 6px 16px rgba(0, 0, 0, .5); }
+.mk-available { background: #10b981; } .mk-resolved { background: #0d9488; } .mk-attention { background: #f59e0b; } .mk-unavailable { background: #e11d48; } .mk-unknown { background: #64748b; }
+.me { position: absolute; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; background: #3b82f6; border: 3px solid #fff; box-shadow: 0 0 0 0 rgba(59, 130, 246, .6); animation: mepulse 2s infinite; z-index: 4; } @keyframes mepulse { to { box-shadow: 0 0 0 22px rgba(59, 130, 246, 0); } }
+.map-ctl { position: absolute; right: 10px; top: 10px; z-index: 6; display: flex; flex-direction: column; gap: 1px; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); } .map-ctl button { width: 38px; height: 38px; border: 0; background: var(--surface); color: var(--text); display: grid; place-items: center; cursor: pointer; } .map-ctl button:hover { background: var(--surface-3); }
+.map-attr { position: absolute; left: 0; bottom: 0; z-index: 6; font-size: 10.5px; padding: 2px 8px; background: rgba(255, 255, 255, .8); color: #333; border-radius: 0 8px 0 0; } .map-attr a { text-decoration: underline; }
+.mapside { display: flex; flex-direction: column; gap: 8px; max-height: 520px; overflow: auto; padding-right: 2px; } .pitem.on { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(34, 211, 238, .18); }
+@media (max-width: 700px) { .mapside { max-height: none; } }
+.sel-wrap .pitem { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(34, 211, 238, .18); }
