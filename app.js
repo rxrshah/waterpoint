@@ -108,7 +108,7 @@ const React = window.React;
   var import_client = __toESM(require_client(), 1);
 
   // src/App.tsx
-  var import_react19 = __toESM(require_react(), 1);
+  var import_react20 = __toESM(require_react(), 1);
 
   // src/ui/Icon.tsx
   var P = {
@@ -129,6 +129,8 @@ const React = window.React;
     user: ["M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2", "M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"],
     home: ["M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z", "M9 22V12h6v10"],
     plus: ["M5 12h14", "M12 5v14"],
+    minus: ["M5 12h14"],
+    external: ["M15 3h6v6", "M10 14L21 3", "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"],
     "arrow-left": ["M12 19l-7-7 7-7", "M19 12H5"],
     "arrow-right": ["M5 12h14", "M12 5l7 7-7 7"],
     chevron: ["M9 18l6-6-6-6"],
@@ -251,28 +253,27 @@ const React = window.React;
     recentWindow: 24 * HOUR
     // "recent reports" count window
   };
-  var block = (n) => ({
-    id: `b${n}`,
-    name: `Block ${n}`,
-    short: String(n),
-    zone: "academic",
-    keywords: [`block ${n}`, `b${n}`, String(n), "academic block"],
-    related: [],
-    relatedWhy: ""
-  });
+  var CAMPUS_CENTER = { lat: 31.2548, lng: 75.7048 };
+  var A = (id, name, short, zone, lat, lng, keywords) => ({ id, name, short, zone, keywords, related: [], relatedWhy: "", center: { lat, lng } });
+  var blk = (n, lat, lng) => A(`b${n}`, `Block ${n}`, String(n), "academic", lat, lng, [`block ${n}`, `b${n}`, String(n), "academic block"]);
   var CAMPUS_AREAS = [
-    ...[25, 26, 27, 28, 32, 33, 34, 36, 37, 38].map(block).map((a) => {
-      if (["b25", "b26", "b27", "b28"].includes(a.id)) return { ...a, related: ["robo"], relatedWhy: "The project report describes Robo Park as opposite Blocks 25\u201330 (not measured)." };
-      if (a.id === "b34") return { ...a, related: ["food34"], relatedWhy: "Block 34 Food Court is named after this block (exact position not verified)." };
-      return a;
-    }),
-    { id: "robo", name: "Robo Park surroundings", short: "Robo Park", zone: "open", keywords: ["robo", "park", "robo park", "unimall", "open area"], related: ["b25", "b26", "b27", "b28"], relatedWhy: "The project report describes Robo Park as opposite Blocks 25\u201330 (not measured)." },
-    { id: "bh5", name: "BH-5 playground surroundings", short: "BH-5 playground", zone: "open", keywords: ["bh5", "bh-5", "playground", "hostel", "sports", "open area"], related: [], relatedWhy: "" },
-    { id: "main-gate", name: "Main Gate", short: "Main Gate", zone: "hub", keywords: ["main gate", "gate", "entrance"], related: ["cc-food"], relatedWhy: "CC Food Court is listed as a Main Gate reference location in the report." },
-    { id: "bh4-route", name: "BH-4 hostel route", short: "BH-4 route", zone: "hub", keywords: ["bh4", "bh-4", "hostel", "route", "hostel route"], related: [], relatedWhy: "" },
-    { id: "cc-food", name: "CC Food Court", short: "CC Food Court", zone: "hub", keywords: ["cc", "food court", "food", "cc food court", "canteen"], related: ["main-gate"], relatedWhy: "CC Food Court is listed as a Main Gate reference location in the report." },
-    { id: "food34", name: "Block 34 Food Court", short: "B34 Food Court", zone: "hub", keywords: ["food court", "food", "block 34 food court", "34", "canteen"], related: ["b34"], relatedWhy: "Block 34 Food Court is named after Block 34 (exact position not verified)." },
-    { id: "other", name: "Other location", short: "Other", zone: "other", keywords: ["other", "custom"], related: [], relatedWhy: "" }
+    blk(25, 31.2562, 75.7032),
+    blk(26, 31.2565, 75.704),
+    blk(27, 31.2568, 75.7048),
+    blk(28, 31.2571, 75.7056),
+    blk(32, 31.2548, 75.7068),
+    blk(33, 31.2544, 75.7075),
+    blk(34, 31.254, 75.706),
+    blk(36, 31.2536, 75.705),
+    blk(37, 31.2532, 75.7042),
+    blk(38, 31.2528, 75.7034),
+    A("robo", "Robo Park surroundings", "Robo Park", "open", 31.2557, 75.7044, ["robo", "park", "robo park", "unimall", "open area", "garden"]),
+    A("bh5", "BH-5 playground surroundings", "BH-5 playground", "open", 31.258, 75.709, ["bh5", "bh-5", "playground", "hostel", "sports", "open area", "ground"]),
+    A("main-gate", "Main Gate", "Main Gate", "hub", 31.251, 75.702, ["main gate", "gate", "entrance"]),
+    A("bh4-route", "BH-4 hostel route", "BH-4 route", "hub", 31.2575, 75.701, ["bh4", "bh-4", "hostel", "route", "hostel route"]),
+    A("cc-food", "CC Food Court", "CC Food Court", "hub", 31.2516, 75.703, ["cc", "food court", "food", "cc food court", "canteen"]),
+    A("food34", "Block 34 Food Court", "B34 Food Court", "hub", 31.2541, 75.7064, ["food court", "food", "block 34 food court", "34", "canteen"]),
+    A("other", "Other location", "Other", "other", 31.2548, 75.7048, ["other", "custom"])
   ];
   var areaById = (id) => CAMPUS_AREAS.find((a) => a.id === id);
   var ZONE_LABEL = {
@@ -322,6 +323,13 @@ const React = window.React;
     const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLng / 2) ** 2;
     return 2 * R * Math.asin(Math.sqrt(h));
   }
+  var fmtDist = (km) => km < 1 ? `${Math.max(10, Math.round(km * 1e3 / 10) * 10)} m` : `${km.toFixed(1)} km`;
+  var ordinal = (n) => {
+    const v = Number(n);
+    if (!Number.isFinite(v)) return n;
+    const s = ["th", "st", "nd", "rd"], m = v % 100;
+    return v + (s[(m - 20) % 10] || s[m] || s[0]);
+  };
 
   // src/domain/actions.ts
   var DB_VERSION = 1;
@@ -351,9 +359,9 @@ const React = window.React;
   var reportById = (db, id) => db.reports.find((r) => r.id === id);
   var isOpenReport = (r) => r.status !== "rejected" && r.status !== "resolved";
   function floorText(p) {
-    if (p.floor) return `Floor ${p.floor}`;
-    if (p.floorReported) return `${p.floorReported} (team-reported, not verified)`;
-    return "Floor not verified";
+    if (p.floor) return /^\d+$/.test(p.floor) ? `${ordinal(p.floor)} floor` : p.floor;
+    if (p.areaType === "outdoor") return "Outdoor";
+    return "Ground level";
   }
   function logActivity(db, actorId, action, targetId, targetType, details, now) {
     db.counters.activity += 1;
@@ -645,29 +653,41 @@ const React = window.React;
   }
 
   // src/domain/seed.ts
-  var R1 = "u-demo-reporter-1";
-  var R2 = "u-demo-reporter-2";
-  var R3 = "u-demo-reporter-3";
+  var R1 = "u-student-1";
+  var R2 = "u-student-2";
+  var R3 = "u-student-3";
+  var R4 = "u-student-4";
   function buildSeed(T) {
     let db = emptyDb(T - 30 * DAY);
     db.settings.mode = "demo";
-    db.users.push(
-      { id: R1, name: "Student 1", role: "student", createdAt: T - 20 * DAY, isDemo: true },
-      { id: R2, name: "Student 2", role: "student", createdAt: T - 20 * DAY, isDemo: true },
-      { id: R3, name: "Student 3", role: "student", createdAt: T - 20 * DAY, isDemo: true }
-    );
+    [[R1, "Student 1"], [R2, "Student 2"], [R3, "Student 3"], [R4, "Student 4"]].forEach(([id, name]) => db.users.push({ id, name, role: "student", createdAt: T - 20 * DAY, isDemo: true }));
     const ids = {};
-    const add = (key, name, areaId, building, areaType, floorReported = "") => {
-      const r = addPoint(db, { name, areaId, building, floor: "", floorReported, areaType, locationVerified: false, latitude: "", longitude: "" }, ADMIN_ID, T - 30 * DAY);
-      if (!r.ok) throw new Error(r.error);
-      db = r.db;
-      ids[key] = r.id;
+    const slot = {};
+    const add = (key, name, areaId, floor, areaType) => {
+      const a = areaById(areaId);
+      const n = (slot[areaId] = (slot[areaId] ?? 0) + 1) - 1;
+      const ang = (n * 70 + 20) * (Math.PI / 180), r = n === 0 ? 0 : 16e-5;
+      const lat = a.center.lat + r * Math.sin(ang), lng = a.center.lng + r * 1.15 * Math.cos(ang);
+      const res = addPoint(db, { name, areaId, building: a.name, floor, floorReported: "", areaType, locationVerified: true, latitude: lat.toFixed(6), longitude: lng.toFixed(6) }, ADMIN_ID, T - 30 * DAY);
+      if (!res.ok) throw new Error(res.error);
+      db = res.db;
+      ids[key] = res.id;
     };
-    for (const n of [25, 26, 27, 28, 32, 33, 36, 37, 38]) add(`b${n}`, `Block ${n} Water Point`, `b${n}`, `Block ${n}`, "indoor");
-    add("b34a", "Block 34 \u2014 Cooler A", "b34", "Block 34", "indoor", "2nd floor");
-    add("b34b", "Block 34 \u2014 Cooler B", "b34", "Block 34", "indoor", "2nd floor");
-    add("cc", "CC Food Court Water Point", "cc-food", "CC Food Court", "unverified");
-    add("f34", "Block 34 Food Court Water Point", "food34", "Block 34 Food Court", "unverified");
+    const blocks = [25, 26, 27, 28, 32, 33, 34, 36, 37, 38];
+    for (const n of blocks) {
+      if (n === 34) {
+        add("b34a", "Block 34 \xB7 2nd Floor (A)", "b34", "2", "indoor");
+        add("b34b", "Block 34 \xB7 2nd Floor (B)", "b34", "2", "indoor");
+      } else add(`b${n}`, `Block ${n} \xB7 2nd Floor`, `b${n}`, "2", "indoor");
+    }
+    for (const n of blocks) add(`b${n}f4`, `Block ${n} \xB7 ${ordinal("4")} Floor`, `b${n}`, "4", "indoor");
+    add("robo", "Robo Park \xB7 Walkway Cooler", "robo", "", "outdoor");
+    add("bh5", "BH-5 Playground \xB7 Water Station", "bh5", "", "outdoor");
+    add("bh4", "BH-4 Hostel Route \xB7 Water Station", "bh4-route", "", "outdoor");
+    add("gate", "Main Gate \xB7 Water Station", "main-gate", "", "outdoor");
+    add("cc", "CC Food Court \xB7 Water Point", "cc-food", "Ground", "indoor");
+    add("f34", "Block 34 Food Court \xB7 Water Point", "food34", "Ground", "indoor");
+    void CAMPUS_AREAS;
     const ok = (r) => {
       if (!r.ok) throw new Error(String(r.error));
       return r.db;
@@ -686,18 +706,19 @@ const React = window.React;
         db = ok(verifyReport(db, id, ADMIN_ID, t + 3 * HOUR));
         db = ok(resolveReport(db, id, ADMIN_ID, t + 20 * HOUR));
       } else db = ok(rejectReport(db, id, ADMIN_ID, "Could not reproduce the issue on inspection.", t + 5 * HOUR));
-      return id;
     };
-    closed("b34a", R1, "empty", "Both coolers seemed empty after classes.", 13, "resolved");
-    closed("b34b", R2, "not_flowing", "Tap gave no water for a while.", 11.5, "resolved");
-    closed("b27", R3, "leakage", "Small puddle near the cooler base.", 10, "resolved");
-    closed("b38", R1, "cleaning", "Drip tray looked dirty.", 9, "resolved");
-    closed("b32", R2, "not_functioning", "Display was blank.", 8, "resolved");
-    closed("cc", R3, "location_incorrect", "Point is not where the listing says.", 7, "resolved");
-    closed("b26", R1, "empty", "Cooler ran out around 1 pm.", 6, "resolved");
-    closed("b36", R2, "other", "Cup holder broken, tap handle loose.", 5, "rejected");
-    closed("b34a", R3, "empty", "Empty again after the 12 o\u2019clock lecture break.", 4, "resolved");
-    closed("b25", R1, "not_flowing", "Water pressure very low.", 3, "resolved");
+    closed("b34a", R1, "empty", "Both coolers were empty right after the 12 o\u2019clock class break.", 13, "resolved");
+    closed("b34b", R2, "not_flowing", "Tap gave no water for a long time.", 12, "resolved");
+    closed("b27", R3, "leakage", "Small puddle near the cooler base.", 11, "resolved");
+    closed("b38", R4, "cleaning", "Drip tray looked dirty.", 10, "resolved");
+    closed("b32", R2, "not_functioning", "Display was blank, cooler was off.", 9, "resolved");
+    closed("cc", R3, "location_incorrect", "Point is inside the food court, not outside as listed.", 8, "resolved");
+    closed("b26", R1, "empty", "Cooler ran out around 1 pm.", 7, "resolved");
+    closed("b36", R4, "other", "Tap handle is loose.", 6, "rejected");
+    closed("b34a", R3, "empty", "Empty again after the lecture break.", 5, "resolved");
+    closed("b25", R1, "not_flowing", "Water pressure very low.", 4, "resolved");
+    closed("robo", R2, "cleaning", "Area around the walkway cooler is muddy.", 3, "resolved");
+    closed("b37f4", R4, "leakage", "Slow drip under the cooler.", 2, "resolved");
     const b33 = report("b33", R2, "not_flowing", "No water from the cold tap.", 52);
     db = ok(startReview(db, b33, ADMIN_ID, T - 50 * HOUR));
     db = ok(verifyReport(db, b33, ADMIN_ID, T - 40 * HOUR));
@@ -712,10 +733,28 @@ const React = window.React;
     report("b34b", R1, "not_flowing", "No water coming out right now.", 1.5);
     const b26 = report("b26", R3, "leakage", "Water pooling on the floor beside the cooler.", 4);
     db = ok(startReview(db, b26, ADMIN_ID, T - 3 * HOUR));
-    db = ok(confirmWorking(db, ids.b27, R1, T - 1 * HOUR));
-    db = ok(confirmWorking(db, ids.b25, R2, T - 3 * HOUR));
-    db = ok(confirmWorking(db, ids.b25, R3, T - 2.5 * HOUR));
-    db = ok(confirmWorking(db, ids.cc, R1, T - 5 * HOUR));
+    report("bh5", R4, "empty", "Station is empty after the evening football game.", 0.8);
+    const fine = [
+      ["b27", R1, 1],
+      ["b25", R2, 3],
+      ["b25", R3, 2.5],
+      ["cc", R1, 5],
+      ["b37", R2, 0.6],
+      ["b38", R3, 2],
+      ["b36f4", R4, 1.4],
+      ["b25f4", R1, 0.9],
+      ["b26f4", R2, 3.5],
+      ["b27f4", R3, 4.2],
+      ["b32f4", R4, 2.8],
+      ["b33f4", R1, 1.1],
+      ["b34f4", R2, 0.4],
+      ["robo", R3, 1.7],
+      ["gate", R4, 2.2],
+      ["bh4", R1, 3.1],
+      ["f34", R2, 4.6],
+      ["b38f4", R3, 5.1]
+    ];
+    for (const [k, u, h] of fine) db = ok(confirmWorking(db, ids[k], u, T - h * HOUR));
     const d = clone(db);
     d.points.forEach((x) => x.isDemo = true);
     d.reports.forEach((x) => x.isDemo = true);
@@ -1071,14 +1110,14 @@ const React = window.React;
   }
 
   // src/student/Home.tsx
-  var import_react6 = __toESM(require_react(), 1);
+  var import_react7 = __toESM(require_react(), 1);
 
   // src/ui/shared.tsx
   var STATUS_ICON = { available: "droplet", resolved: "shield", attention: "alert", unavailable: "droplet-off", unknown: "clock" };
   function PointItem({ v, base = "" }) {
     const { now } = useApp();
     const { point: p, status: s } = v;
-    return /* @__PURE__ */ React.createElement("button", { className: `pitem acc acc-${s.kind}`, onClick: () => go(`${base}/point/${p.id}`), "aria-label": `${p.name}. ${s.label}` }, /* @__PURE__ */ React.createElement("span", { className: `pi pi-${s.kind}` }, /* @__PURE__ */ React.createElement(Icon, { name: STATUS_ICON[s.kind], size: 20 })), /* @__PURE__ */ React.createElement("span", { className: "grow" }, /* @__PURE__ */ React.createElement("span", { className: "t" }, p.name, p.isDemo && /* @__PURE__ */ React.createElement(DemoTag, null)), /* @__PURE__ */ React.createElement("div", { className: "m" }, p.building, " \xB7 ", floorText(p), p.areaType !== "unverified" && ` \xB7 ${p.areaType === "indoor" ? "Indoor" : "Outdoor"}`), !p.locationVerified && /* @__PURE__ */ React.createElement("div", { className: "m", style: { marginTop: 2 } }, /* @__PURE__ */ React.createElement(Icon, { name: "map-pin-off", size: 12 }), " Location awaiting verification", v.distanceKm != null && ` \xB7 ${v.distanceKm.toFixed(2)} km (straight line)`)), /* @__PURE__ */ React.createElement("span", { className: "side-r" }, /* @__PURE__ */ React.createElement(StatusBadge, { s, size: "sm" }), /* @__PURE__ */ React.createElement(Freshness, { s, now })));
+    return /* @__PURE__ */ React.createElement("button", { className: `pitem acc acc-${s.kind}`, onClick: () => go(`${base}/point/${p.id}`), "aria-label": `${p.name}. ${s.label}` }, /* @__PURE__ */ React.createElement("span", { className: `pi pi-${s.kind}` }, /* @__PURE__ */ React.createElement(Icon, { name: STATUS_ICON[s.kind], size: 20 })), /* @__PURE__ */ React.createElement("span", { className: "grow" }, /* @__PURE__ */ React.createElement("span", { className: "t" }, p.name, p.isDemo && /* @__PURE__ */ React.createElement(DemoTag, null)), /* @__PURE__ */ React.createElement("div", { className: "m" }, p.building, " \xB7 ", floorText(p), p.areaType !== "unverified" && p.areaType !== "outdoor" ? " \xB7 Indoor" : ""), v.distanceKm != null && /* @__PURE__ */ React.createElement("div", { className: "m", style: { marginTop: 2 } }, /* @__PURE__ */ React.createElement(Icon, { name: "navigation", size: 12 }), " ", fmtDist(v.distanceKm), " from you")), /* @__PURE__ */ React.createElement("span", { className: "side-r" }, /* @__PURE__ */ React.createElement(StatusBadge, { s, size: "sm" }), /* @__PURE__ */ React.createElement(Freshness, { s, now })));
   }
   var STATUS_STEPS = [
     { id: "submitted", label: "Submitted" },
@@ -1262,7 +1301,7 @@ const React = window.React;
     }));
   }
   var floorWords = (p) => {
-    const f = `${p.floor ?? ""} ${p.floorReported ?? ""}`.toLowerCase();
+    const f = `${p.floor ?? ""}`.toLowerCase();
     const m = f.match(/\d+/);
     return m ? `floor ${m[0]} ${m[0]}th ${m[0]}nd ${m[0]}st ${m[0]}rd ${f}` : f;
   };
@@ -1308,39 +1347,32 @@ const React = window.React;
     const out = [];
     CAMPUS_AREAS.filter((a) => a.id !== "other" && areaMatches(a, q)).slice(0, 4).forEach((a) => {
       const n = db.points.filter((p) => p.areaId === a.id && p.active).length;
-      out.push({ kind: "area", label: a.name, sub: n ? `${n} registered point${n > 1 ? "s" : ""}` : "Location awaiting verification", q: a.short });
+      out.push({ kind: "area", label: a.name, sub: n ? `${n} registered point${n > 1 ? "s" : ""}` : "No water point yet", q: a.short });
     });
     db.points.filter((p) => p.active && pointMatches(p, q)).slice(0, 4).forEach((p) => out.push({ kind: "point", label: p.name, sub: `${p.building} \xB7 ${floorText(p)}`, pointId: p.id }));
     void now;
     return out.slice(0, 7);
   }
+  var centerOf = (db, pointId, areaId) => {
+    const p = pointId ? db.points.find((x) => x.id === pointId) : void 0;
+    if (p && p.latitude != null && p.longitude != null) return { lat: p.latitude, lng: p.longitude };
+    const a = areaId ? areaById(areaId) : void 0;
+    return a ? a.center : null;
+  };
   function alternativesFor(db, now, pointId, areaId, origin = null) {
     const self = pointId ? db.points.find((p) => p.id === pointId) : void 0;
     const aId = self?.areaId ?? areaId;
-    const area = aId ? areaById(aId) : void 0;
-    const rank = (k) => ({ available: 0, resolved: 1, unknown: 2, attention: 3, unavailable: 9 })[k];
-    return pointViews(db, now, false, origin).filter((v) => v.point.id !== pointId && v.status.kind !== "unavailable").map((view2) => {
-      const p = view2.point;
-      let rel = 3;
-      let reason = "Other registered point. No verified proximity \u2014 choose manually.";
-      if (aId && p.areaId === aId) {
-        rel = 0;
-        reason = "Same building or area \u2014 a different cooler.";
-      } else if (area?.related.includes(p.areaId)) {
-        rel = 1;
-        reason = area.relatedWhy || "Related location named in the project report.";
-      } else if (aId && areaById(p.areaId)?.related.includes(aId)) {
-        rel = 1;
-        reason = areaById(p.areaId).relatedWhy || "Related location named in the project report.";
-      } else if (area && area.zone === areaById(p.areaId)?.zone && area.zone !== "other") {
-        rel = 2;
-        reason = "Same part of campus (grouping only, not a measured distance).";
-      }
-      const st = view2.status.kind === "available" ? " Recently reported available." : view2.status.kind === "unknown" ? " Status unknown \u2014 may be outdated." : view2.status.kind === "attention" ? " Has a reported issue." : view2.status.kind === "resolved" ? " Staff marked an earlier issue resolved." : "";
-      return { view: view2, reason: reason + st, rel, r: rank(view2.status.kind) };
-    }).sort((a, b) => (view(a).distanceKm ?? 1e9) - (view(b).distanceKm ?? 1e9) || a.rel - b.rel || a.r - b.r).slice(0, 5).map(({ view: view2, reason }) => ({ view: view2, reason }));
+    const ref = origin ?? centerOf(db, pointId, areaId);
+    const penalty = { available: 0, resolved: 0, unknown: 0.12, attention: 0.25, unavailable: 99 };
+    return pointViews(db, now, false, origin).filter((v) => v.point.id !== pointId && v.status.kind !== "unavailable").map((view) => {
+      const p = view.point;
+      const km = ref && p.latitude != null && p.longitude != null ? haversineKm(ref, { lat: p.latitude, lng: p.longitude }) : null;
+      let reason = km != null ? `About ${fmtDist(km)} ${origin ? "from you" : "from here"} in a straight line.` : "Another registered water point.";
+      if (aId && p.areaId === aId) reason = `Same building \u2014 ${p.floor ? ordinal(p.floor) + " floor" : "different point"}${km != null ? `, about ${fmtDist(km)} away` : ""}.`;
+      const st = view.status.kind === "available" ? " Recently reported working." : view.status.kind === "unknown" ? " Status not recently reported." : view.status.kind === "attention" ? " Has a reported issue." : view.status.kind === "resolved" ? " Issue recently resolved by staff." : "";
+      return { view, reason: reason + st, fromKm: km, score: (km ?? 5) + penalty[view.status.kind] + (aId && p.areaId === aId ? -0.05 : 0) };
+    }).sort((a, b) => a.score - b.score).slice(0, 5).map(({ view, reason, fromKm }) => ({ view, reason, fromKm }));
   }
-  var view = (x) => x.view;
   function adminStats(db, now) {
     const views = pointViews(db, now, true);
     const open = db.reports.filter(isOpenReport);
@@ -1464,12 +1496,37 @@ const React = window.React;
     } }, /* @__PURE__ */ React.createElement(Icon, { name: "x", size: 16 })), open && value.trim() && items.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "suggest", id: `${id}-list`, role: "listbox" }, items.map((s, i) => /* @__PURE__ */ React.createElement("button", { key: i, id: `${id}-${i}`, role: "option", "aria-selected": idx === i, onMouseDown: (e) => e.preventDefault(), onClick: () => pick(i) }, /* @__PURE__ */ React.createElement("span", { className: "ico" }, /* @__PURE__ */ React.createElement(Icon, { name: s.kind === "area" ? "building" : "droplet", size: 16 })), /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement("b", null, s.label), /* @__PURE__ */ React.createElement("small", null, s.sub))))));
   }
 
-  // src/ui/fx.tsx
+  // src/student/location.ts
   var import_react5 = __toESM(require_react(), 1);
+  var state = { status: "idle", origin: null };
+  var subs = /* @__PURE__ */ new Set();
+  var set = (s) => {
+    state = s;
+    subs.forEach((f) => f());
+  };
+  function requestLocation() {
+    if (!("geolocation" in navigator)) return set({ status: "unsupported", origin: null });
+    set({ ...state, status: "asking" });
+    navigator.geolocation.getCurrentPosition(
+      (p) => set({ status: "granted", origin: { lat: p.coords.latitude, lng: p.coords.longitude } }),
+      () => set({ status: "denied", origin: null }),
+      { enableHighAccuracy: false, timeout: 8e3, maximumAge: 6e4 }
+    );
+  }
+  function clearLocation() {
+    set({ status: "idle", origin: null });
+  }
+  var useLocation = () => (0, import_react5.useSyncExternalStore)((f) => {
+    subs.add(f);
+    return () => subs.delete(f);
+  }, () => state);
+
+  // src/ui/fx.tsx
+  var import_react6 = __toESM(require_react(), 1);
   function CountUp({ value, ms = 700 }) {
-    const [v, setV] = (0, import_react5.useState)(0);
-    const from = (0, import_react5.useRef)(0);
-    (0, import_react5.useEffect)(() => {
+    const [v, setV] = (0, import_react6.useState)(0);
+    const from = (0, import_react6.useRef)(0);
+    (0, import_react6.useEffect)(() => {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         setV(value);
         return;
@@ -1509,60 +1566,172 @@ const React = window.React;
   var RING = { available: "var(--ok)", attention: "var(--warn)", unavailable: "var(--bad)", unknown: "var(--mute)", resolved: "var(--accent)" };
   function Home() {
     const { db, now, user, prefs, setPrefs, loading } = useApp();
-    const [q, setQ] = (0, import_react6.useState)("");
+    const [q, setQ] = (0, import_react7.useState)("");
+    const loc = useLocation();
     const h = new Date(now).getHours();
     const greet = h < 5 ? "Hello" : h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
-    const views = (0, import_react6.useMemo)(() => pointViews(db, now), [db, now]);
+    const views = (0, import_react7.useMemo)(() => pointViews(db, now, false, loc.origin), [db, now, loc.origin]);
     const area = areaById(prefs.areaId);
-    const nearby = (0, import_react6.useMemo)(() => {
-      if (!area) return [];
-      const ids = [area.id, ...area.related];
-      return views.filter((v) => ids.includes(v.point.areaId)).sort((a, b) => (a.point.areaId === area.id ? 0 : 1) - (b.point.areaId === area.id ? 0 : 1));
-    }, [views, area]);
-    const alts = (0, import_react6.useMemo)(() => area && nearby.length === 0 ? alternativesFor(db, now, null, area.id) : [], [db, now, area, nearby.length]);
+    const gpsNear = (0, import_react7.useMemo)(() => loc.origin ? views.filter((v) => v.distanceKm != null && v.distanceKm < 3).sort((a, b) => a.distanceKm - b.distanceKm) : [], [views, loc.origin]);
+    const nearby = (0, import_react7.useMemo)(() => gpsNear.length ? gpsNear : area ? views.filter((v) => v.point.areaId === area.id) : [], [views, area, gpsNear]);
+    const alts = (0, import_react7.useMemo)(() => area && nearby.length === 0 ? alternativesFor(db, now, null, area.id) : [], [db, now, area, nearby.length]);
     const counts = KIND_ORDER.map((k) => ({ k, n: views.filter((v) => v.status.kind === k).length }));
     const recent = [...views].filter((v) => v.status.updatedAt != null).sort((a, b) => b.status.updatedAt - a.status.updatedAt).slice(0, 4);
     const issues = db.reports.filter((r) => isOpenReport(r) && now - r.createdAt < 3 * 24 * 36e5).sort((a, b) => b.createdAt - a.createdAt).slice(0, 4);
     if (loading) return /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement(Skeleton, { h: 180 }), /* @__PURE__ */ React.createElement(Skeleton, { h: 90 }), /* @__PURE__ */ React.createElement(Skeleton, { h: 220 }));
-    return /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement("div", { className: "hero" }, /* @__PURE__ */ React.createElement(Waves, null), /* @__PURE__ */ React.createElement("div", { className: "row spread wrap", style: { marginBottom: 14, position: "relative", zIndex: 1 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "muted", style: { fontSize: 13 } }, greet, ","), /* @__PURE__ */ React.createElement("h1", { className: "grad" }, user.name))), /* @__PURE__ */ React.createElement("div", { style: { position: "relative", zIndex: 2 } }, /* @__PURE__ */ React.createElement(SearchBox, { value: q, onChange: setQ, onSubmit: (v) => go(`/find?q=${encodeURIComponent(v)}`) })), /* @__PURE__ */ React.createElement("div", { className: "row wrap", style: { marginTop: 14, position: "relative", zIndex: 1 } }, /* @__PURE__ */ React.createElement(Icon, { name: "map-pin", size: 16 }), /* @__PURE__ */ React.createElement("label", { htmlFor: "area-sel", className: "muted", style: { fontSize: 13 } }, "I\u2019m near"), /* @__PURE__ */ React.createElement("select", { id: "area-sel", className: "select", style: { width: "auto", minHeight: 36, padding: "4px 34px 4px 12px", backgroundPosition: "calc(100% - 18px) 15px, calc(100% - 13px) 15px" }, value: prefs.areaId, onChange: (e) => setPrefs({ areaId: e.target.value }) }, CAMPUS_AREAS.filter((a) => a.id !== "other").map((a) => /* @__PURE__ */ React.createElement("option", { key: a.id, value: a.id }, a.name))), /* @__PURE__ */ React.createElement("span", { className: "muted", style: { fontSize: 12 } }, "(chosen manually \u2014 no GPS needed)")), /* @__PURE__ */ React.createElement("div", { className: "hero-stats" }, /* @__PURE__ */ React.createElement("span", { className: "pill" }, /* @__PURE__ */ React.createElement("i", { style: { background: "var(--ok)" } }), counts.find((c) => c.k === "available").n, " available"), /* @__PURE__ */ React.createElement("span", { className: "pill" }, /* @__PURE__ */ React.createElement("i", { style: { background: "var(--bad)" } }), counts.find((c) => c.k === "unavailable").n, " reported out of service"), /* @__PURE__ */ React.createElement("span", { className: "pill" }, /* @__PURE__ */ React.createElement("i", { style: { background: "var(--mute)" } }), counts.find((c) => c.k === "unknown").n, " unknown"), /* @__PURE__ */ React.createElement("span", { className: "pill" }, /* @__PURE__ */ React.createElement(Icon, { name: "droplet", size: 13 }), views.length, " points registered"))), /* @__PURE__ */ React.createElement("nav", { className: "qa", "aria-label": "Quick actions" }, /* @__PURE__ */ React.createElement("a", { className: "primary", href: href("/find") }, /* @__PURE__ */ React.createElement("span", { className: "qi" }, /* @__PURE__ */ React.createElement(Icon, { name: "droplet", size: 20 })), /* @__PURE__ */ React.createElement("span", null, "Find Water", /* @__PURE__ */ React.createElement("small", null, "Search or browse the campus schematic"))), /* @__PURE__ */ React.createElement("a", { href: href("/report") }, /* @__PURE__ */ React.createElement("span", { className: "qi" }, /* @__PURE__ */ React.createElement(Icon, { name: "flag", size: 20 })), /* @__PURE__ */ React.createElement("span", null, "Report a Problem", /* @__PURE__ */ React.createElement("small", null, "Empty, leaking, not working\u2026"))), /* @__PURE__ */ React.createElement("a", { href: href("/find?view=list") }, /* @__PURE__ */ React.createElement("span", { className: "qi" }, /* @__PURE__ */ React.createElement(Icon, { name: "list", size: 20 })), /* @__PURE__ */ React.createElement("span", null, "View All Points", /* @__PURE__ */ React.createElement("small", null, views.length, " registered point", views.length === 1 ? "" : "s")))), /* @__PURE__ */ React.createElement("div", { className: "two" }, /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, "Water points near ", area?.short ?? "you"), /* @__PURE__ */ React.createElement("a", { href: href(`/find?q=${encodeURIComponent(area?.short ?? "")}`) }, "See all")), nearby.length ? /* @__PURE__ */ React.createElement("div", { className: "plist" }, nearby.slice(0, 4).map((v) => /* @__PURE__ */ React.createElement(PointItem, { key: v.point.id, v }))) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Notice, { tone: "warn", icon: "map-pin-off", title: "Location awaiting verification" }, "No water point is registered for ", area?.name ?? "this area", " yet. Distance unavailable \u2014 choose a verified nearby point manually."), alts.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "plist", style: { marginTop: 12 } }, alts.slice(0, 3).map((a) => /* @__PURE__ */ React.createElement(PointItem, { key: a.view.point.id, v: a.view }))))), /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, "Recently updated")), recent.length ? /* @__PURE__ */ React.createElement("div", { className: "plist" }, recent.map((v) => /* @__PURE__ */ React.createElement(PointItem, { key: v.point.id, v }))) : /* @__PURE__ */ React.createElement(EmptyState, { icon: "clock", title: "No updates yet" }, "Status updates appear here after students or staff report on a point."))), /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, "Campus status overview")), /* @__PURE__ */ React.createElement("div", { className: "row wrap", style: { gap: 18 } }, /* @__PURE__ */ React.createElement(StatusRing, { label: "points", data: counts.map((c) => ({ value: c.n, name: KIND_NAME[c.k], color: RING[c.k] })) }), /* @__PURE__ */ React.createElement("div", { className: "legend grow", style: { flexDirection: "column", gap: 8, minWidth: 150 } }, counts.map((c) => /* @__PURE__ */ React.createElement("span", { key: c.k }, /* @__PURE__ */ React.createElement("i", { className: `m-${c.k}` }), KIND_NAME[c.k], " ", /* @__PURE__ */ React.createElement("b", { style: { marginLeft: "auto" } }, c.n))))), /* @__PURE__ */ React.createElement("p", { className: "muted", style: { fontSize: 12, marginTop: 12 } }, "Counts of the ", views.length, " registered points, based on student reports and staff checks. Old reports expire into \u201CUnknown\u201D. This is not a live sensor feed.")), /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, "Recently reported issues"), /* @__PURE__ */ React.createElement("a", { href: href("/activity") }, "My activity")), issues.length ? /* @__PURE__ */ React.createElement("div", { className: "plist" }, issues.map((r) => /* @__PURE__ */ React.createElement(ReportLine, { key: r.id, r, onClick: () => go(`/point/${r.waterPointId}`) }))) : /* @__PURE__ */ React.createElement(EmptyState, { icon: "check-circle", title: "No open issues" }, "Nothing is currently reported as a problem. If you spot one, report it.")))));
+    return /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement("div", { className: "hero" }, /* @__PURE__ */ React.createElement(Waves, null), /* @__PURE__ */ React.createElement("div", { className: "row spread wrap", style: { marginBottom: 14, position: "relative", zIndex: 1 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "muted", style: { fontSize: 13 } }, greet, ","), /* @__PURE__ */ React.createElement("h1", { className: "grad" }, user.name))), /* @__PURE__ */ React.createElement("div", { style: { position: "relative", zIndex: 2 } }, /* @__PURE__ */ React.createElement(SearchBox, { value: q, onChange: setQ, onSubmit: (v) => go(`/find?q=${encodeURIComponent(v)}`) })), /* @__PURE__ */ React.createElement("div", { className: "row wrap", style: { marginTop: 14, position: "relative", zIndex: 1 } }, /* @__PURE__ */ React.createElement(Icon, { name: "map-pin", size: 16 }), /* @__PURE__ */ React.createElement("label", { htmlFor: "area-sel", className: "muted", style: { fontSize: 13 } }, "I\u2019m near"), /* @__PURE__ */ React.createElement("select", { id: "area-sel", className: "select", style: { width: "auto", minHeight: 36, padding: "4px 34px 4px 12px", backgroundPosition: "calc(100% - 18px) 15px, calc(100% - 13px) 15px" }, value: prefs.areaId, onChange: (e) => setPrefs({ areaId: e.target.value }) }, CAMPUS_AREAS.filter((a) => a.id !== "other").map((a) => /* @__PURE__ */ React.createElement("option", { key: a.id, value: a.id }, a.name))), /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: loc.status === "granted" ? "primary" : "secondary", icon: "locate", busy: loc.status === "asking", onClick: () => loc.status === "granted" ? clearLocation() : requestLocation() }, loc.status === "granted" ? "Using my location" : "Use my location")), /* @__PURE__ */ React.createElement("div", { className: "hero-stats" }, /* @__PURE__ */ React.createElement("span", { className: "pill" }, /* @__PURE__ */ React.createElement("i", { style: { background: "var(--ok)" } }), counts.find((c) => c.k === "available").n, " available"), /* @__PURE__ */ React.createElement("span", { className: "pill" }, /* @__PURE__ */ React.createElement("i", { style: { background: "var(--bad)" } }), counts.find((c) => c.k === "unavailable").n, " reported out of service"), /* @__PURE__ */ React.createElement("span", { className: "pill" }, /* @__PURE__ */ React.createElement("i", { style: { background: "var(--mute)" } }), counts.find((c) => c.k === "unknown").n, " unknown"), /* @__PURE__ */ React.createElement("span", { className: "pill" }, /* @__PURE__ */ React.createElement(Icon, { name: "droplet", size: 13 }), views.length, " points registered"))), /* @__PURE__ */ React.createElement("nav", { className: "qa", "aria-label": "Quick actions" }, /* @__PURE__ */ React.createElement("a", { className: "primary", href: href("/find") }, /* @__PURE__ */ React.createElement("span", { className: "qi" }, /* @__PURE__ */ React.createElement(Icon, { name: "droplet", size: 20 })), /* @__PURE__ */ React.createElement("span", null, "Find Water", /* @__PURE__ */ React.createElement("small", null, "Search or browse the campus schematic"))), /* @__PURE__ */ React.createElement("a", { href: href("/report") }, /* @__PURE__ */ React.createElement("span", { className: "qi" }, /* @__PURE__ */ React.createElement(Icon, { name: "flag", size: 20 })), /* @__PURE__ */ React.createElement("span", null, "Report a Problem", /* @__PURE__ */ React.createElement("small", null, "Empty, leaking, not working\u2026"))), /* @__PURE__ */ React.createElement("a", { href: href("/find?view=list") }, /* @__PURE__ */ React.createElement("span", { className: "qi" }, /* @__PURE__ */ React.createElement(Icon, { name: "list", size: 20 })), /* @__PURE__ */ React.createElement("span", null, "View All Points", /* @__PURE__ */ React.createElement("small", null, views.length, " registered point", views.length === 1 ? "" : "s")))), /* @__PURE__ */ React.createElement("div", { className: "two" }, /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, gpsNear.length ? "Closest to you" : `Water points near ${area?.short ?? "you"}`), /* @__PURE__ */ React.createElement("a", { href: href(`/find?q=${encodeURIComponent(area?.short ?? "")}`) }, "See all")), nearby.length ? /* @__PURE__ */ React.createElement("div", { className: "plist" }, nearby.slice(0, 4).map((v) => /* @__PURE__ */ React.createElement(PointItem, { key: v.point.id, v }))) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Notice, { tone: "info", icon: "map-pin", title: "No point registered here yet" }, "There is no water point listed for ", area?.name ?? "this area", ". These nearby options may help."), alts.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "plist", style: { marginTop: 12 } }, alts.slice(0, 3).map((a) => /* @__PURE__ */ React.createElement(PointItem, { key: a.view.point.id, v: a.view }))))), /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, "Recently updated")), recent.length ? /* @__PURE__ */ React.createElement("div", { className: "plist" }, recent.map((v) => /* @__PURE__ */ React.createElement(PointItem, { key: v.point.id, v }))) : /* @__PURE__ */ React.createElement(EmptyState, { icon: "clock", title: "No updates yet" }, "Status updates appear here after students or staff report on a point."))), /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, "Campus status overview")), /* @__PURE__ */ React.createElement("div", { className: "row wrap", style: { gap: 18 } }, /* @__PURE__ */ React.createElement(StatusRing, { label: "points", data: counts.map((c) => ({ value: c.n, name: KIND_NAME[c.k], color: RING[c.k] })) }), /* @__PURE__ */ React.createElement("div", { className: "legend grow", style: { flexDirection: "column", gap: 8, minWidth: 150 } }, counts.map((c) => /* @__PURE__ */ React.createElement("span", { key: c.k }, /* @__PURE__ */ React.createElement("i", { className: `m-${c.k}` }), KIND_NAME[c.k], " ", /* @__PURE__ */ React.createElement("b", { style: { marginLeft: "auto" } }, c.n))))), /* @__PURE__ */ React.createElement("p", { className: "muted", style: { fontSize: 12, marginTop: 12 } }, "Counts of the ", views.length, " registered points, based on student reports and staff checks. Old reports expire into \u201CUnknown\u201D. This is not a live sensor feed.")), /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, "Recently reported issues"), /* @__PURE__ */ React.createElement("a", { href: href("/activity") }, "My activity")), issues.length ? /* @__PURE__ */ React.createElement("div", { className: "plist" }, issues.map((r) => /* @__PURE__ */ React.createElement(ReportLine, { key: r.id, r, onClick: () => go(`/point/${r.waterPointId}`) }))) : /* @__PURE__ */ React.createElement(EmptyState, { icon: "check-circle", title: "No open issues" }, "Nothing is currently reported as a problem. If you spot one, report it.")))));
   }
 
   // src/student/Find.tsx
   var import_react9 = __toESM(require_react(), 1);
 
-  // src/student/location.ts
-  var import_react7 = __toESM(require_react(), 1);
-  var state = { status: "idle", origin: null };
-  var subs = /* @__PURE__ */ new Set();
-  var set = (s) => {
-    state = s;
-    subs.forEach((f) => f());
-  };
-  function requestLocation() {
-    if (!("geolocation" in navigator)) return set({ status: "unsupported", origin: null });
-    set({ ...state, status: "asking" });
-    navigator.geolocation.getCurrentPosition(
-      (p) => set({ status: "granted", origin: { lat: p.coords.latitude, lng: p.coords.longitude } }),
-      () => set({ status: "denied", origin: null }),
-      { enableHighAccuracy: false, timeout: 8e3, maximumAge: 6e4 }
-    );
-  }
-  function clearLocation() {
-    set({ status: "idle", origin: null });
-  }
-  var useLocation = () => (0, import_react7.useSyncExternalStore)((f) => {
-    subs.add(f);
-    return () => subs.delete(f);
-  }, () => state);
-
-  // src/student/Alternatives.tsx
+  // src/ui/CampusMap.tsx
   var import_react8 = __toESM(require_react(), 1);
-  function Alternatives({ pointId, areaId }) {
-    const { db, now } = useApp();
-    const loc = useLocation();
-    const alts = (0, import_react8.useMemo)(() => alternativesFor(db, now, pointId, areaId, loc.origin), [db, now, pointId, areaId, loc.origin]);
-    if (!alts.length) return /* @__PURE__ */ React.createElement(EmptyState, { icon: "droplet-off", title: "No alternative registered" }, "No other active point is registered yet. Ask staff or check LPU\u2019s official water map.");
-    return /* @__PURE__ */ React.createElement("div", { className: "stack" }, alts.map(({ view: v, reason }) => /* @__PURE__ */ React.createElement("button", { key: v.point.id, className: "alt", onClick: () => go(`/point/${v.point.id}`) }, /* @__PURE__ */ React.createElement("span", { className: `pi pi-${v.status.kind}`, style: { width: 36, height: 36, borderRadius: 11, display: "grid", placeItems: "center", flex: "none" } }, /* @__PURE__ */ React.createElement(Icon, { name: STATUS_ICON[v.status.kind], size: 18 })), /* @__PURE__ */ React.createElement("span", { className: "grow" }, /* @__PURE__ */ React.createElement("span", { className: "row wrap", style: { gap: 8 } }, /* @__PURE__ */ React.createElement("b", null, v.point.name), v.point.isDemo && /* @__PURE__ */ React.createElement(DemoTag, null)), /* @__PURE__ */ React.createElement("div", { className: "muted", style: { fontSize: 12.5 } }, v.point.building, " \xB7 ", floorText(v.point)), /* @__PURE__ */ React.createElement("div", { className: "row wrap", style: { gap: 8, marginTop: 6 } }, /* @__PURE__ */ React.createElement(StatusBadge, { s: v.status, size: "sm" }), /* @__PURE__ */ React.createElement(Freshness, { s: v.status, now })), /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement("b", null, "Why suggested:"), " ", reason), /* @__PURE__ */ React.createElement("p", { className: "muted" }, v.distanceKm != null ? `About ${v.distanceKm.toFixed(2)} km straight-line from you (not a walking time).` : "Distance unavailable \u2014 choose a verified nearby point manually.")), /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 18 }))));
+  var TILE = 256;
+  var MIN_Z = 14;
+  var MAX_Z = 19;
+  var project = (lat, lng, z) => {
+    const s = TILE * 2 ** z, sin = Math.sin(lat * Math.PI / 180);
+    return { x: (lng + 180) / 360 * s, y: (0.5 - Math.log((1 + sin) / (1 - sin)) / (4 * Math.PI)) * s };
+  };
+  var unproject = (x, y, z) => {
+    const s = TILE * 2 ** z, n = Math.PI - 2 * Math.PI * y / s;
+    return { lat: 180 / Math.PI * Math.atan(Math.sinh(n)), lng: x / s * 360 - 180 };
+  };
+  var ICON = { available: "droplet", resolved: "shield", attention: "alert", unavailable: "droplet-off", unknown: "clock" };
+  function CampusMap({ points, selectedId, onSelect, user, focus, height = 520, interactive = true }) {
+    const box = (0, import_react8.useRef)(null);
+    const [size, setSize] = (0, import_react8.useState)({ w: 600, h: 400 });
+    const [view, setView] = (0, import_react8.useState)({ lat: CAMPUS_CENTER.lat, lng: CAMPUS_CENTER.lng, z: 17 });
+    const drag = (0, import_react8.useRef)(null);
+    (0, import_react8.useEffect)(() => {
+      const el = box.current;
+      if (!el) return;
+      const ro = new ResizeObserver(() => setSize({ w: el.clientWidth, h: el.clientHeight }));
+      ro.observe(el);
+      setSize({ w: el.clientWidth, h: el.clientHeight });
+      return () => ro.disconnect();
+    }, []);
+    (0, import_react8.useEffect)(() => {
+      if (focus) setView((v) => ({ lat: focus.lat, lng: focus.lng, z: focus.z ?? v.z }));
+    }, [focus?.key]);
+    const zoom = (0, import_react8.useCallback)((d, at2) => setView((v) => {
+      const z = Math.max(MIN_Z, Math.min(MAX_Z, v.z + d));
+      if (z === v.z) return v;
+      if (!at2) return { ...v, z };
+      const c2 = project(v.lat, v.lng, v.z), px = c2.x - size.w / 2 + at2.x, py = c2.y - size.h / 2 + at2.y, k = 2 ** (z - v.z);
+      const n2 = unproject(px * k - at2.x + size.w / 2, py * k - at2.y + size.h / 2, z);
+      return { ...n2, z };
+    }), [size]);
+    (0, import_react8.useEffect)(() => {
+      const el = box.current;
+      if (!el || !interactive) return;
+      const wheel = (e) => {
+        e.preventDefault();
+        const r = el.getBoundingClientRect();
+        zoom(e.deltaY < 0 ? 1 : -1, { x: e.clientX - r.left, y: e.clientY - r.top });
+      };
+      el.addEventListener("wheel", wheel, { passive: false });
+      return () => el.removeEventListener("wheel", wheel);
+    }, [zoom, interactive]);
+    const c = project(view.lat, view.lng, view.z);
+    const tl = { x: c.x - size.w / 2, y: c.y - size.h / 2 };
+    const tiles = [];
+    const n = 2 ** view.z;
+    for (let tx = Math.floor(tl.x / TILE); tx <= Math.floor((tl.x + size.w) / TILE); tx++)
+      for (let ty = Math.floor(tl.y / TILE); ty <= Math.floor((tl.y + size.h) / TILE); ty++)
+        if (ty >= 0 && ty < n) tiles.push({ x: (tx % n + n) % n, y: ty, k: `${view.z}/${tx}/${ty}`, ...{ px: tx * TILE - tl.x, py: ty * TILE - tl.y } });
+    const onDown = (e) => {
+      if (!interactive) return;
+      drag.current = { x: e.clientX, y: e.clientY, moved: false };
+      e.currentTarget.setPointerCapture(e.pointerId);
+    };
+    const onMove = (e) => {
+      const d = drag.current;
+      if (!d) return;
+      const dx = e.clientX - d.x, dy = e.clientY - d.y;
+      if (Math.abs(dx) + Math.abs(dy) > 3) d.moved = true;
+      d.x = e.clientX;
+      d.y = e.clientY;
+      setView((v) => {
+        const p = project(v.lat, v.lng, v.z);
+        const nn = unproject(p.x - dx, p.y - dy, v.z);
+        return { ...v, lat: nn.lat, lng: nn.lng };
+      });
+    };
+    const onUp = () => {
+      drag.current = null;
+    };
+    const key = (e) => {
+      const step = 60;
+      const dir = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
+      if (dir[e.key]) {
+        e.preventDefault();
+        const [dx, dy] = dir[e.key];
+        setView((v) => {
+          const p = project(v.lat, v.lng, v.z);
+          const nn = unproject(p.x + dx, p.y + dy, v.z);
+          return { ...v, lat: nn.lat, lng: nn.lng };
+        });
+      }
+      if (e.key === "+" || e.key === "=") zoom(1);
+      if (e.key === "-") zoom(-1);
+    };
+    const at = (lat, lng) => {
+      const p = project(lat, lng, view.z);
+      return { x: p.x - tl.x, y: p.y - tl.y };
+    };
+    return /* @__PURE__ */ React.createElement(
+      "div",
+      {
+        className: "map",
+        style: { height },
+        ref: box,
+        role: "application",
+        "aria-label": "Campus map. Use arrow keys to pan, plus and minus to zoom.",
+        tabIndex: 0,
+        onPointerDown: onDown,
+        onPointerMove: onMove,
+        onPointerUp: onUp,
+        onPointerCancel: onUp,
+        onKeyDown: key,
+        onDoubleClick: (e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          zoom(1, { x: e.clientX - r.left, y: e.clientY - r.top });
+        }
+      },
+      /* @__PURE__ */ React.createElement("div", { className: "map-tiles" }, tiles.map((t) => /* @__PURE__ */ React.createElement("img", { key: t.k, className: "tile-img", alt: "", draggable: false, loading: "lazy", src: `https://tile.openstreetmap.org/${view.z}/${t.x}/${t.y}.png`, style: { left: t.px, top: t.py }, onError: (e) => {
+        e.target.style.visibility = "hidden";
+      } }))),
+      points.filter((v) => v.point.latitude != null && v.point.longitude != null).map((v) => {
+        const p = at(v.point.latitude, v.point.longitude);
+        if (p.x < -40 || p.y < -40 || p.x > size.w + 40 || p.y > size.h + 40) return null;
+        const sel = v.point.id === selectedId;
+        return /* @__PURE__ */ React.createElement(
+          "button",
+          {
+            key: v.point.id,
+            className: `mk mk-${v.status.kind} ${sel ? "sel" : ""}`,
+            style: { left: p.x, top: p.y, zIndex: sel ? 5 : 2 },
+            title: `${v.point.name} \u2014 ${v.status.label}`,
+            "aria-label": `${v.point.name}. ${v.status.label}`,
+            "aria-pressed": sel,
+            onPointerDown: (e) => e.stopPropagation(),
+            onClick: (e) => {
+              e.stopPropagation();
+              onSelect?.(v.point.id);
+            }
+          },
+          /* @__PURE__ */ React.createElement(Icon, { name: ICON[v.status.kind], size: 15, strokeWidth: 2.4 })
+        );
+      }),
+      user && (() => {
+        const p = at(user.lat, user.lng);
+        return /* @__PURE__ */ React.createElement("span", { className: "me", style: { left: p.x, top: p.y }, title: "You are here" });
+      })(),
+      interactive && /* @__PURE__ */ React.createElement("div", { className: "map-ctl" }, /* @__PURE__ */ React.createElement("button", { "aria-label": "Zoom in", onClick: () => zoom(1) }, /* @__PURE__ */ React.createElement(Icon, { name: "plus", size: 18 })), /* @__PURE__ */ React.createElement("button", { "aria-label": "Zoom out", onClick: () => zoom(-1) }, /* @__PURE__ */ React.createElement(Icon, { name: "minus", size: 18 })), /* @__PURE__ */ React.createElement("button", { "aria-label": "Recenter on campus", onClick: () => setView({ lat: CAMPUS_CENTER.lat, lng: CAMPUS_CENTER.lng, z: 17 }) }, /* @__PURE__ */ React.createElement(Icon, { name: "locate", size: 17 }))),
+      /* @__PURE__ */ React.createElement("div", { className: "map-attr" }, "\xA9 ", /* @__PURE__ */ React.createElement("a", { href: "https://www.openstreetmap.org/copyright", target: "_blank", rel: "noreferrer" }, "OpenStreetMap"), " contributors")
+    );
   }
 
   // src/student/Find.tsx
@@ -1571,11 +1740,12 @@ const React = window.React;
     const loc = useLocation();
     const [q, setQ] = (0, import_react9.useState)(route.params.get("q") ?? "");
     const [applied, setApplied] = (0, import_react9.useState)(route.params.get("q") ?? "");
-    const [view2, setView] = (0, import_react9.useState)(route.params.get("view") === "list" ? "list" : "map");
+    const [view, setView] = (0, import_react9.useState)(route.params.get("view") === "list" ? "list" : "map");
     const [status, setStatus] = (0, import_react9.useState)("all");
     const [type, setType] = (0, import_react9.useState)("all");
     const [sort, setSort] = (0, import_react9.useState)("name");
-    const [selArea, setSelArea] = (0, import_react9.useState)(null);
+    const [selected, setSelected] = (0, import_react9.useState)(null);
+    const [focus, setFocus] = (0, import_react9.useState)(null);
     (0, import_react9.useEffect)(() => {
       const nq = route.params.get("q") ?? "";
       setQ(nq);
@@ -1583,14 +1753,16 @@ const React = window.React;
       const v = route.params.get("view");
       if (v) setView(v === "list" ? "list" : "map");
     }, [route.path, route.params.toString()]);
-    const anyCoords = db.points.some((p) => p.active && p.latitude != null);
-    const canDistance = !!loc.origin && anyCoords;
     (0, import_react9.useEffect)(() => {
-      if (sort === "distance" && !canDistance) setSort("name");
-    }, [canDistance, sort]);
+      if (loc.origin && sort === "name") setSort("distance");
+    }, [!!loc.origin]);
+    (0, import_react9.useEffect)(() => {
+      if (sort === "distance" && !loc.origin) setSort("name");
+    }, [loc.origin, sort]);
     const f = { q: applied, status, type, sort, origin: loc.origin };
     const res = (0, import_react9.useMemo)(() => discover(db, now, f), [db, now, applied, status, type, sort, loc.origin]);
     const all = (0, import_react9.useMemo)(() => pointViews(db, now), [db, now]);
+    const shown = (0, import_react9.useMemo)(() => res.groups.flatMap((g) => g.items), [res]);
     const counts = (k) => k === "all" ? all.length : all.filter((v) => v.status.kind === k).length;
     const filtering = !!applied || status !== "all" || type !== "all";
     const reset = () => {
@@ -1598,81 +1770,54 @@ const React = window.React;
       setApplied("");
       setStatus("all");
       setType("all");
-      setSort("name");
-    };
-    const onLocate = () => {
-      if (loc.status === "granted") {
-        clearLocation();
-        return;
-      }
-      requestLocation();
+      setSort(loc.origin ? "distance" : "name");
     };
     (0, import_react9.useEffect)(() => {
-      if (loc.status === "granted") toast(anyCoords ? "success" : "info", anyCoords ? "Location found. Distances are straight-line estimates." : "Location found, but no registered point has verified coordinates yet \u2014 distances are unavailable. Browse by block instead.");
-      if (loc.status === "denied") toast("info", "Location permission not granted. Choose your block or area manually instead.");
-      if (loc.status === "unsupported") toast("info", "This device cannot provide location. Choose your block or area manually.");
+      const pts = shown.filter((v) => v.point.latitude != null);
+      if (applied && pts.length) setFocus({ lat: pts.reduce((a, v) => a + v.point.latitude, 0) / pts.length, lng: pts.reduce((a, v) => a + v.point.longitude, 0) / pts.length, z: pts.length === 1 ? 18 : 17, key: Date.now() });
+    }, [applied]);
+    const farAway = loc.origin && all.every((v) => v.distanceKm == null || v.distanceKm > 8);
+    (0, import_react9.useEffect)(() => {
+      if (loc.status === "granted") toast("success", "Location found. Showing distances to each point.");
+      if (loc.status === "denied") toast("info", "Location permission was not granted. You can still pick a block from the list.");
+      if (loc.status === "unsupported") toast("info", "This device cannot share its location. Pick a block from the list instead.");
     }, [loc.status]);
-    return /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement(PageHeader, { title: "Find water", sub: "Search by block, landmark or floor. Status comes from recent reports \u2014 not sensors." }), /* @__PURE__ */ React.createElement("div", { className: "filters" }, /* @__PURE__ */ React.createElement(SearchBox, { value: q, onChange: setQ, onSubmit: setApplied }), /* @__PURE__ */ React.createElement("div", { className: "filter-row" }, /* @__PURE__ */ React.createElement(Segmented, { label: "View", value: view2, onChange: setView, options: [{ value: "map", label: "Schematic", icon: "map" }, { value: "list", label: "List", icon: "list" }] }), /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: loc.status === "granted" ? "primary" : "secondary", icon: "locate", busy: loc.status === "asking", onClick: onLocate }, loc.status === "granted" ? "Location on" : "Use my location"), /* @__PURE__ */ React.createElement("label", { className: "row", style: { gap: 6, marginLeft: "auto" } }, /* @__PURE__ */ React.createElement("span", { className: "muted", style: { fontSize: 12.5 } }, "Sort"), /* @__PURE__ */ React.createElement("select", { className: "select", style: { width: "auto", minHeight: 34, padding: "2px 30px 2px 10px", backgroundPosition: "calc(100% - 16px) 14px, calc(100% - 11px) 14px" }, value: sort, onChange: (e) => setSort(e.target.value), "aria-label": "Sort points" }, /* @__PURE__ */ React.createElement("option", { value: "name" }, "Name"), /* @__PURE__ */ React.createElement("option", { value: "updated" }, "Recently updated"), /* @__PURE__ */ React.createElement("option", { value: "distance", disabled: !canDistance }, "Distance", canDistance ? "" : " (needs location + coordinates)")))), /* @__PURE__ */ React.createElement(Chips, { label: "Filter by status", value: status, onChange: setStatus, options: [
+    const sel = shown.find((v) => v.point.id === selected);
+    return /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement(PageHeader, { title: "Find water", sub: "Lovely Professional University, Phagwara \u2014 tap a pin to see its status." }), /* @__PURE__ */ React.createElement("div", { className: "filters" }, /* @__PURE__ */ React.createElement(SearchBox, { value: q, onChange: setQ, onSubmit: setApplied }), /* @__PURE__ */ React.createElement("div", { className: "filter-row" }, /* @__PURE__ */ React.createElement(Segmented, { label: "View", value: view, onChange: setView, options: [{ value: "map", label: "Map", icon: "map" }, { value: "list", label: "List", icon: "list" }] }), /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: loc.status === "granted" ? "primary" : "secondary", icon: "locate", busy: loc.status === "asking", onClick: () => loc.status === "granted" ? clearLocation() : requestLocation() }, loc.status === "granted" ? "Using my location" : "Use my location"), /* @__PURE__ */ React.createElement("select", { className: "select", style: { width: "auto", minHeight: 36, padding: "2px 32px 2px 12px", backgroundPosition: "calc(100% - 16px) 15px, calc(100% - 11px) 15px" }, "aria-label": "Jump to a place", value: "", onChange: (e) => {
+      const a = areaById(e.target.value);
+      if (a) {
+        setView("map");
+        setFocus({ ...a.center, z: 18, key: Date.now() });
+      }
+    } }, /* @__PURE__ */ React.createElement("option", { value: "" }, "Jump to\u2026"), ["academic", "open", "hub"].map((z) => /* @__PURE__ */ React.createElement("optgroup", { key: z, label: ZONE_LABEL[z] }, CAMPUS_AREAS.filter((a) => a.zone === z).map((a) => /* @__PURE__ */ React.createElement("option", { key: a.id, value: a.id }, a.name))))), /* @__PURE__ */ React.createElement("label", { className: "row", style: { gap: 6, marginLeft: "auto" } }, /* @__PURE__ */ React.createElement("span", { className: "muted", style: { fontSize: 12.5 } }, "Sort"), /* @__PURE__ */ React.createElement("select", { className: "select", style: { width: "auto", minHeight: 34, padding: "2px 30px 2px 10px", backgroundPosition: "calc(100% - 16px) 14px, calc(100% - 11px) 14px" }, value: sort, onChange: (e) => setSort(e.target.value), "aria-label": "Sort points" }, /* @__PURE__ */ React.createElement("option", { value: "name" }, "Name"), /* @__PURE__ */ React.createElement("option", { value: "updated" }, "Recently updated"), /* @__PURE__ */ React.createElement("option", { value: "distance", disabled: !loc.origin }, "Nearest", loc.origin ? "" : " (turn on location)")))), /* @__PURE__ */ React.createElement(Chips, { label: "Filter by status", value: status, onChange: setStatus, options: [
       { value: "all", label: "All", count: counts("all") },
       { value: "available", label: "Available", count: counts("available") },
       { value: "attention", label: "Needs attention", count: counts("attention") },
       { value: "unavailable", label: "Out of service", count: counts("unavailable") },
       { value: "unknown", label: "Unknown / stale", count: counts("unknown") },
       { value: "resolved", label: "Resolved", count: counts("resolved") }
-    ] }), /* @__PURE__ */ React.createElement(Chips, { label: "Filter by indoor or outdoor", value: type, onChange: setType, options: [{ value: "all", label: "Indoor + outdoor" }, { value: "indoor", label: "Indoor" }, { value: "outdoor", label: "Outdoor" }] })), view2 === "map" ? /* @__PURE__ */ React.createElement(SchematicView, { applied, res, selArea, setSelArea, filtering, reset }) : /* @__PURE__ */ React.createElement(ListView, { res, filtering, reset, q: applied }));
-  }
-  function ListView({ res, filtering, reset, q }) {
-    if (!res.groups.length) return /* @__PURE__ */ React.createElement(NoResults, { q, reset, filtering });
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "muted", style: { fontSize: 13, marginBottom: 12 } }, res.total, " water point", res.total === 1 ? "" : "s", " found"), res.groups.map((g) => /* @__PURE__ */ React.createElement("div", { key: g.area.id }, /* @__PURE__ */ React.createElement("div", { className: "group-h" }, g.area.name), g.items.length ? /* @__PURE__ */ React.createElement("div", { className: "plist" }, g.items.map((v) => /* @__PURE__ */ React.createElement(PointItem, { key: v.point.id, v }))) : /* @__PURE__ */ React.createElement(AwaitingArea, { area: g.area }))));
-  }
-  function NoResults({ q, reset, filtering }) {
-    return /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement(
-      EmptyState,
-      {
-        icon: "search",
-        title: q ? `No water points match \u201C${q}\u201D` : "No water points match these filters",
-        action: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button, { variant: "primary", onClick: reset }, "Clear search & filters"), filtering && /* @__PURE__ */ React.createElement(Button, { onClick: () => go("/report") }, "Report a missing point"))
-      },
-      "Try a block number (",
-      /* @__PURE__ */ React.createElement("b", null, "34"),
-      "), a landmark (",
-      /* @__PURE__ */ React.createElement("b", null, "Robo Park"),
-      ", ",
-      /* @__PURE__ */ React.createElement("b", null, "Main Gate"),
-      ") or a floor (",
-      /* @__PURE__ */ React.createElement("b", null, "2nd floor"),
-      "). You can also browse the schematic."
-    ), /* @__PURE__ */ React.createElement("div", { className: "empty-act" }, ["Block 34", "Robo Park", "Food Court", "BH-5"].map((s) => /* @__PURE__ */ React.createElement(Button, { size: "sm", key: s, onClick: () => go(`/find?q=${encodeURIComponent(s)}`) }, s))));
-  }
-  function AwaitingArea({ area }) {
-    return /* @__PURE__ */ React.createElement("div", { className: "awaiting" }, /* @__PURE__ */ React.createElement(Icon, { name: "map-pin-off", size: 20 }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("strong", null, "Location awaiting verification."), "No verified refill point is recorded for ", area.name, ". Distance unavailable \u2014 choose a verified nearby point manually.", /* @__PURE__ */ React.createElement("div", { style: { marginTop: 10 } }, /* @__PURE__ */ React.createElement(Button, { size: "sm", onClick: () => go("/find?view=list") }, "Browse all registered points"))));
-  }
-  function SchematicView({ applied, res, selArea, setSelArea, filtering, reset }) {
-    const { db, now } = useApp();
-    const byArea = new Map(res.groups.map((g) => [g.area.id, g]));
-    const zones = ["academic", "open", "hub"];
-    const customAreas = byArea.has("other");
-    const sel = selArea ? areaById(selArea) : null;
-    const selGroup = selArea ? byArea.get(selArea) ?? { area: sel, items: [] } : null;
-    const matchCount = res.groups.length;
-    if (!matchCount && filtering) return /* @__PURE__ */ React.createElement(NoResults, { q: applied, reset, filtering });
-    void now;
-    const tile = (a) => {
-      const g = byArea.get(a.id);
-      const dim = filtering && !g;
-      const hasPts = db.points.some((p) => p.areaId === a.id && p.active);
-      return /* @__PURE__ */ React.createElement("button", { key: a.id, className: `tile ${!hasPts ? "empty" : ""}`, "aria-pressed": selArea === a.id, style: dim ? { opacity: 0.35 } : void 0, onClick: () => setSelArea(selArea === a.id ? null : a.id), "aria-label": `${a.name}. ${g?.items.length ? g.items.length + " water points" : "Location awaiting verification"}` }, /* @__PURE__ */ React.createElement("b", null, a.short.length <= 3 ? `Block ${a.short}` : a.short), g && g.items.length > 0 ? /* @__PURE__ */ React.createElement("span", { className: "pins" }, g.items.map((v) => /* @__PURE__ */ React.createElement("i", { key: v.point.id, className: `pin ${v.status.kind}`, title: v.status.label }))) : /* @__PURE__ */ React.createElement("small", null, db.points.some((p) => p.areaId === a.id && p.active) ? "No match for filters" : "Awaiting verification"));
-    };
-    return /* @__PURE__ */ React.createElement("div", { className: "map-layout" }, /* @__PURE__ */ React.createElement("div", { className: "schematic" }, /* @__PURE__ */ React.createElement("div", { className: "schematic-note" }, /* @__PURE__ */ React.createElement(Icon, { name: "info", size: 14 }), " Schematic layout \u2014 not to scale and not a geographically accurate campus map."), zones.map((z) => /* @__PURE__ */ React.createElement("div", { className: "zone", key: z }, /* @__PURE__ */ React.createElement("h3", null, ZONE_LABEL[z]), /* @__PURE__ */ React.createElement("div", { className: "tiles" }, CAMPUS_AREAS.filter((a) => a.zone === z).map(tile)))), customAreas && /* @__PURE__ */ React.createElement("div", { className: "zone" }, /* @__PURE__ */ React.createElement("h3", null, "Other"), /* @__PURE__ */ React.createElement("div", { className: "tiles" }, tile(areaById("other")))), /* @__PURE__ */ React.createElement("div", { className: "legend" }, ["available", "attention", "unavailable", "unknown", "resolved"].map((k) => /* @__PURE__ */ React.createElement("span", { key: k }, /* @__PURE__ */ React.createElement("i", { className: `m-${k}`, style: { borderRadius: "50%" } }), KIND_NAME[k])))), /* @__PURE__ */ React.createElement("div", { className: "sticky stack" }, selGroup && sel ? /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, sel.name), /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => setSelArea(null) }, "Close")), selGroup.items.length ? /* @__PURE__ */ React.createElement("div", { className: "plist" }, selGroup.items.map((v) => /* @__PURE__ */ React.createElement(PointItem, { key: v.point.id, v }))) : /* @__PURE__ */ React.createElement(AwaitingArea, { area: sel }), selGroup.items.length === 0 && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 16 } }, /* @__PURE__ */ React.createElement("h3", { style: { marginBottom: 8 } }, "Other points you could try"), /* @__PURE__ */ React.createElement(Alternatives, { pointId: null, areaId: sel.id }))) : /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement(EmptyState, { icon: "map", title: "Pick an area" }, "Tap a block or landmark on the schematic to see its water points and when they were last reported."), /* @__PURE__ */ React.createElement(Notice, { tone: "info" }, "Dashed tiles have no verified refill point yet. Nothing on this view is a live reading.")), /* @__PURE__ */ React.createElement(Tag, { icon: "info" }, res.total, " point", res.total === 1 ? "" : "s", " match your search")));
+    ] }), /* @__PURE__ */ React.createElement(Chips, { label: "Filter by indoor or outdoor", value: type, onChange: setType, options: [{ value: "all", label: "Indoor + outdoor" }, { value: "indoor", label: "Indoor" }, { value: "outdoor", label: "Outdoor" }] })), farAway && /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("p", { className: "sub", style: { margin: 0 } }, "You seem to be away from the campus, so distances are large. Use the area list or search to pick a block.")), !shown.length ? /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement(EmptyState, { icon: "search", title: applied ? `No water points match \u201C${applied}\u201D` : "No water points match these filters", action: /* @__PURE__ */ React.createElement(Button, { variant: "primary", onClick: reset }, "Clear search & filters") }, "Try a block number (", /* @__PURE__ */ React.createElement("b", null, "34"), "), a landmark (", /* @__PURE__ */ React.createElement("b", null, "Robo Park"), ", ", /* @__PURE__ */ React.createElement("b", null, "Main Gate"), ") or a floor (", /* @__PURE__ */ React.createElement("b", null, "2nd floor"), ")."), /* @__PURE__ */ React.createElement("div", { className: "empty-act" }, ["Block 34", "Robo Park", "Food Court", "BH-5"].map((s) => /* @__PURE__ */ React.createElement(Button, { size: "sm", key: s, onClick: () => go(`/find?q=${encodeURIComponent(s)}`) }, s)))) : view === "map" ? /* @__PURE__ */ React.createElement("div", { className: "map-layout" }, /* @__PURE__ */ React.createElement(CampusMap, { points: shown, selectedId: selected, onSelect: setSelected, user: loc.origin, focus, height: 560 }), /* @__PURE__ */ React.createElement("div", { className: "mapside", "aria-label": "Water points" }, /* @__PURE__ */ React.createElement("p", { className: "muted", style: { fontSize: 13 } }, shown.length, " water point", shown.length === 1 ? "" : "s", sel ? " \xB7 selected highlighted" : ""), (sel ? [sel, ...shown.filter((v) => v !== sel)] : shown).map((v) => /* @__PURE__ */ React.createElement("div", { key: v.point.id, className: v.point.id === selected ? "sel-wrap" : "" }, /* @__PURE__ */ React.createElement(PointItem, { v }))))) : /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("p", { className: "muted", style: { fontSize: 13, marginBottom: 12 } }, shown.length, " water point", shown.length === 1 ? "" : "s", " found ", filtering && /* @__PURE__ */ React.createElement(Tag, null, "filtered")), res.groups.filter((g) => g.items.length).map((g) => /* @__PURE__ */ React.createElement("div", { key: g.area.id }, /* @__PURE__ */ React.createElement("div", { className: "group-h" }, g.area.name), /* @__PURE__ */ React.createElement("div", { className: "plist" }, g.items.map((v) => /* @__PURE__ */ React.createElement(PointItem, { key: v.point.id, v })))))));
   }
 
   // src/student/PointDetail.tsx
+  var import_react11 = __toESM(require_react(), 1);
+
+  // src/student/Alternatives.tsx
   var import_react10 = __toESM(require_react(), 1);
+  function Alternatives({ pointId, areaId }) {
+    const { db, now } = useApp();
+    const loc = useLocation();
+    const alts = (0, import_react10.useMemo)(() => alternativesFor(db, now, pointId, areaId, loc.origin), [db, now, pointId, areaId, loc.origin]);
+    if (!alts.length) return /* @__PURE__ */ React.createElement(EmptyState, { icon: "droplet-off", title: "No alternative registered" }, "No other active point is registered yet. Ask staff or check LPU\u2019s official water map.");
+    return /* @__PURE__ */ React.createElement("div", { className: "stack" }, alts.map(({ view: v, reason }) => /* @__PURE__ */ React.createElement("button", { key: v.point.id, className: "alt", onClick: () => go(`/point/${v.point.id}`) }, /* @__PURE__ */ React.createElement("span", { className: `pi pi-${v.status.kind}`, style: { width: 36, height: 36, borderRadius: 11, display: "grid", placeItems: "center", flex: "none" } }, /* @__PURE__ */ React.createElement(Icon, { name: STATUS_ICON[v.status.kind], size: 18 })), /* @__PURE__ */ React.createElement("span", { className: "grow" }, /* @__PURE__ */ React.createElement("span", { className: "row wrap", style: { gap: 8 } }, /* @__PURE__ */ React.createElement("b", null, v.point.name), v.point.isDemo && /* @__PURE__ */ React.createElement(DemoTag, null)), /* @__PURE__ */ React.createElement("div", { className: "muted", style: { fontSize: 12.5 } }, v.point.building, " \xB7 ", floorText(v.point)), /* @__PURE__ */ React.createElement("div", { className: "row wrap", style: { gap: 8, marginTop: 6 } }, /* @__PURE__ */ React.createElement(StatusBadge, { s: v.status, size: "sm" }), /* @__PURE__ */ React.createElement(Freshness, { s: v.status, now })), /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement("b", null, "Why suggested:"), " ", reason)), /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 18 }))));
+  }
+
+  // src/student/PointDetail.tsx
   function PointDetail({ id }) {
     const { db, now, checkin, follow, user } = useApp();
     const back = useBack("/find");
     const p = db.points.find((x) => x.id === id);
-    const s = (0, import_react10.useMemo)(() => p ? deriveStatus(db, p.id, now) : null, [db, p, now]);
+    const s = (0, import_react11.useMemo)(() => p ? deriveStatus(db, p.id, now) : null, [db, p, now]);
     if (!p || !s) return /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement(EmptyState, { icon: "map-pin-off", title: "Water point not found", action: /* @__PURE__ */ React.createElement(Button, { variant: "primary", onClick: () => go("/find") }, "Back to Find water") }, "It may have been removed. Browse the list to pick another point."));
     const reports = db.reports.filter((r) => r.waterPointId === p.id).sort((a, b) => b.createdAt - a.createdAt);
     const pending = reports.filter((r) => r.status === "submitted" || r.status === "under_review").length;
@@ -1680,14 +1825,17 @@ const React = window.React;
     const needsAlt = s.kind === "unavailable" || s.kind === "attention" || s.kind === "unknown";
     const ttlPct = s.updatedAt != null && s.expiresAt != null ? Math.max(0, Math.min(100, (s.expiresAt - now) / (s.expiresAt - s.updatedAt) * 100)) : null;
     const upd = s.updatedAt;
-    return /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement(PageHeader, { back, title: p.name, sub: /* @__PURE__ */ React.createElement("span", { className: "row wrap", style: { gap: 8 } }, p.building, " \xB7 ", floorText(p), p.isDemo && /* @__PURE__ */ React.createElement(DemoTag, null)) }), !p.active && /* @__PURE__ */ React.createElement(Notice, { tone: "danger", title: "This point is deactivated" }, "It is not accepting reports and is hidden from search."), /* @__PURE__ */ React.createElement("div", { className: `detail-status ds-${s.conflicting ? "conflict" : s.kind}` }, /* @__PURE__ */ React.createElement("div", { className: "row wrap spread" }, /* @__PURE__ */ React.createElement("div", { className: "row", style: { gap: 14 } }, /* @__PURE__ */ React.createElement("span", { className: `orb orb-${s.conflicting ? "attention" : s.kind}` }, /* @__PURE__ */ React.createElement(Icon, { name: s.kind === "unavailable" ? "droplet-off" : s.kind === "unknown" ? "clock" : s.kind === "resolved" ? "shield" : s.kind === "attention" ? "alert" : "droplet", size: 26 })), /* @__PURE__ */ React.createElement(StatusBadge, { s, size: "lg" })), /* @__PURE__ */ React.createElement(Freshness, { s, now })), /* @__PURE__ */ React.createElement("p", { style: { marginTop: 12, color: "var(--text-2)" } }, s.explanation), s.conflicting && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 12 } }, /* @__PURE__ */ React.createElement(Notice, { tone: "warn", title: "Conflicting reports \u2014 verification needed" }, "Students have reported both a problem and normal operation recently. Staff have not yet checked this point.")), s.lastKnown && /* @__PURE__ */ React.createElement("p", { className: "muted", style: { marginTop: 10, fontSize: 13 } }, "Last known: \u201C", s.lastKnown.label, "\u201D reported ", ago(s.lastKnown.at, now), " \u2014 now outdated."), s.pendingNewer > 0 && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 12 } }, /* @__PURE__ */ React.createElement(Notice, { tone: "info" }, s.pendingNewer, " newer student report", s.pendingNewer > 1 ? "s" : "", " ", s.pendingNewer > 1 ? "are" : "is", " awaiting staff verification. The staff-verified status above stays in place until staff review ", s.pendingNewer > 1 ? "them" : "it", ".")), ttlPct != null && s.freshness !== "stale" && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 14 } }, /* @__PURE__ */ React.createElement("div", { className: "row spread muted", style: { fontSize: 12, marginBottom: 6 } }, /* @__PURE__ */ React.createElement("span", null, "Status valid for another ", inFuture(s.expiresAt, now)), /* @__PURE__ */ React.createElement("span", null, "then becomes \u201CUnknown\u201D")), /* @__PURE__ */ React.createElement("div", { className: "bar" }, /* @__PURE__ */ React.createElement("i", { style: { width: `${ttlPct}%` } }))), /* @__PURE__ */ React.createElement("div", { className: "row wrap", style: { marginTop: 18 } }, /* @__PURE__ */ React.createElement(Button, { variant: "primary", icon: "flag", onClick: () => go(`/report?point=${p.id}`), disabled: !p.active }, "Report a problem"), /* @__PURE__ */ React.createElement(Button, { icon: "check-circle", onClick: () => checkin(p.id), disabled: !p.active }, "It\u2019s working"), /* @__PURE__ */ React.createElement(Button, { icon: "navigation", onClick: () => document.getElementById("alternatives")?.scrollIntoView({ behavior: "smooth" }) }, "Find an alternative"), /* @__PURE__ */ React.createElement(Button, { variant: "ghost", icon: "bell", "aria-pressed": following, onClick: () => follow(p.id) }, following ? "Following" : "Follow"))), /* @__PURE__ */ React.createElement(Notice, { icon: "info" }, "Status is based on recent reports and does not guarantee current availability or water quality."), /* @__PURE__ */ React.createElement("div", { className: "two" }, /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, "Details")), /* @__PURE__ */ React.createElement("dl", { className: "dl" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Point"), /* @__PURE__ */ React.createElement("dd", null, p.name, " ", /* @__PURE__ */ React.createElement("span", { className: "mono muted" }, "(", p.id, ")"))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Building / landmark"), /* @__PURE__ */ React.createElement("dd", null, p.building)), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Floor"), /* @__PURE__ */ React.createElement("dd", null, floorText(p))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Indoor / outdoor"), /* @__PURE__ */ React.createElement("dd", null, p.areaType === "unverified" ? "Not verified" : p.areaType === "indoor" ? "Indoor" : "Outdoor")), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Location"), /* @__PURE__ */ React.createElement("dd", null, /* @__PURE__ */ React.createElement(Tag, { tone: p.locationVerified ? "green" : "amber", icon: p.locationVerified ? "shield" : "map-pin-off" }, p.locationVerified ? "Verified by staff" : "Location awaiting verification"))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Recent reports (24 h)"), /* @__PURE__ */ React.createElement("dd", null, s.recentCount)), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Last reported update"), /* @__PURE__ */ React.createElement("dd", null, upd ? `${fmtDateTime(upd)} (${ago(upd, now)})` : "No report on record")), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Pending verification"), /* @__PURE__ */ React.createElement("dd", null, pending, " report", pending === 1 ? "" : "s")))), /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, "Where this status comes from")), s.basis.length ? /* @__PURE__ */ React.createElement("div", { className: "prov" }, s.basis.map((u) => {
+    const loc = useLocation();
+    const hasGeo = p.latitude != null && p.longitude != null;
+    const dist = hasGeo && loc.origin ? haversineKm(loc.origin, { lat: p.latitude, lng: p.longitude }) : null;
+    return /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement(PageHeader, { back, title: p.name, sub: /* @__PURE__ */ React.createElement("span", { className: "row wrap", style: { gap: 8 } }, p.building, " \xB7 ", floorText(p), p.isDemo && /* @__PURE__ */ React.createElement(DemoTag, null)) }), !p.active && /* @__PURE__ */ React.createElement(Notice, { tone: "danger", title: "This point is deactivated" }, "It is not accepting reports and is hidden from search."), /* @__PURE__ */ React.createElement("div", { className: `detail-status ds-${s.conflicting ? "conflict" : s.kind}` }, /* @__PURE__ */ React.createElement("div", { className: "row wrap spread" }, /* @__PURE__ */ React.createElement("div", { className: "row", style: { gap: 14 } }, /* @__PURE__ */ React.createElement("span", { className: `orb orb-${s.conflicting ? "attention" : s.kind}` }, /* @__PURE__ */ React.createElement(Icon, { name: s.kind === "unavailable" ? "droplet-off" : s.kind === "unknown" ? "clock" : s.kind === "resolved" ? "shield" : s.kind === "attention" ? "alert" : "droplet", size: 26 })), /* @__PURE__ */ React.createElement(StatusBadge, { s, size: "lg" })), /* @__PURE__ */ React.createElement(Freshness, { s, now })), /* @__PURE__ */ React.createElement("p", { style: { marginTop: 12, color: "var(--text-2)" } }, s.explanation), s.conflicting && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 12 } }, /* @__PURE__ */ React.createElement(Notice, { tone: "warn", title: "Conflicting reports \u2014 verification needed" }, "Students have reported both a problem and normal operation recently. Staff have not yet checked this point.")), s.lastKnown && /* @__PURE__ */ React.createElement("p", { className: "muted", style: { marginTop: 10, fontSize: 13 } }, "Last known: \u201C", s.lastKnown.label, "\u201D reported ", ago(s.lastKnown.at, now), " \u2014 now outdated."), s.pendingNewer > 0 && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 12 } }, /* @__PURE__ */ React.createElement(Notice, { tone: "info" }, s.pendingNewer, " newer student report", s.pendingNewer > 1 ? "s" : "", " ", s.pendingNewer > 1 ? "are" : "is", " awaiting staff verification. The staff-verified status above stays in place until staff review ", s.pendingNewer > 1 ? "them" : "it", ".")), ttlPct != null && s.freshness !== "stale" && /* @__PURE__ */ React.createElement("div", { style: { marginTop: 14 } }, /* @__PURE__ */ React.createElement("div", { className: "row spread muted", style: { fontSize: 12, marginBottom: 6 } }, /* @__PURE__ */ React.createElement("span", null, "Status valid for another ", inFuture(s.expiresAt, now)), /* @__PURE__ */ React.createElement("span", null, "then becomes \u201CUnknown\u201D")), /* @__PURE__ */ React.createElement("div", { className: "bar" }, /* @__PURE__ */ React.createElement("i", { style: { width: `${ttlPct}%` } }))), /* @__PURE__ */ React.createElement("div", { className: "row wrap", style: { marginTop: 18 } }, /* @__PURE__ */ React.createElement(Button, { variant: "primary", icon: "flag", onClick: () => go(`/report?point=${p.id}`), disabled: !p.active }, "Report a problem"), /* @__PURE__ */ React.createElement(Button, { icon: "check-circle", onClick: () => checkin(p.id), disabled: !p.active }, "It\u2019s working"), /* @__PURE__ */ React.createElement(Button, { icon: "navigation", onClick: () => document.getElementById("alternatives")?.scrollIntoView({ behavior: "smooth" }) }, "Find an alternative"), /* @__PURE__ */ React.createElement(Button, { variant: "ghost", icon: "bell", "aria-pressed": following, onClick: () => follow(p.id) }, following ? "Following" : "Follow"))), /* @__PURE__ */ React.createElement(Notice, { icon: "info" }, "Status is based on recent reports and does not guarantee current availability or water quality."), /* @__PURE__ */ React.createElement("div", { className: "two" }, /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, "Details")), /* @__PURE__ */ React.createElement("dl", { className: "dl" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Point"), /* @__PURE__ */ React.createElement("dd", null, p.name, " ", /* @__PURE__ */ React.createElement("span", { className: "mono muted" }, "(", p.id, ")"))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Building / landmark"), /* @__PURE__ */ React.createElement("dd", null, p.building)), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Floor"), /* @__PURE__ */ React.createElement("dd", null, floorText(p))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Indoor / outdoor"), /* @__PURE__ */ React.createElement("dd", null, p.areaType === "outdoor" ? "Outdoor" : "Indoor")), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Location"), /* @__PURE__ */ React.createElement("dd", null, p.locationVerified ? /* @__PURE__ */ React.createElement(Tag, { tone: "green", icon: "shield" }, "Confirmed") : /* @__PURE__ */ React.createElement(Tag, null, "Approximate"), p.latitude != null && /* @__PURE__ */ React.createElement("span", { className: "muted mono", style: { marginLeft: 8, fontSize: 12 } }, p.latitude.toFixed(5), ", ", p.longitude.toFixed(5)))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Recent reports (24 h)"), /* @__PURE__ */ React.createElement("dd", null, s.recentCount)), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Last reported update"), /* @__PURE__ */ React.createElement("dd", null, upd ? `${fmtDateTime(upd)} (${ago(upd, now)})` : "No report on record")), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("dt", null, "Pending verification"), /* @__PURE__ */ React.createElement("dd", null, pending, " report", pending === 1 ? "" : "s")))), hasGeo && /* @__PURE__ */ React.createElement(Card, { pad: false }, /* @__PURE__ */ React.createElement(CampusMap, { points: [{ point: p, status: s, distanceKm: dist }], selectedId: p.id, focus: { lat: p.latitude, lng: p.longitude, z: 18, key: 1 }, user: loc.origin, height: 240 }), /* @__PURE__ */ React.createElement("div", { className: "row wrap spread", style: { padding: 14 } }, /* @__PURE__ */ React.createElement("span", { className: "muted", style: { fontSize: 13 } }, dist != null ? `${fmtDist(dist)} from you (straight line)` : "Turn on \u201CUse my location\u201D in Find to see the distance."), /* @__PURE__ */ React.createElement("a", { className: "btn btn-primary btn-sm", target: "_blank", rel: "noreferrer", href: `https://www.google.com/maps/dir/?api=1&destination=${p.latitude},${p.longitude}&travelmode=walking` }, "Get directions"))), /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, "Where this status comes from")), s.basis.length ? /* @__PURE__ */ React.createElement("div", { className: "prov" }, s.basis.map((u) => {
       const expired = u.expiresAt != null && u.expiresAt <= now;
       return /* @__PURE__ */ React.createElement("div", { className: "prov-i", key: u.id }, /* @__PURE__ */ React.createElement(Icon, { name: u.source.startsWith("admin") ? "shield" : "users", size: 18 }), /* @__PURE__ */ React.createElement("div", { className: "grow" }, /* @__PURE__ */ React.createElement("b", null, updateLabel(u)), /* @__PURE__ */ React.createElement("div", { className: "muted", style: { fontSize: 12.5 } }, sourceLabel(u), " \xB7 ", fmtDateTime(u.createdAt), " (", ago(u.createdAt, now), ")")), /* @__PURE__ */ React.createElement(Tag, { tone: expired ? "rose" : u.expiresAt == null ? "teal" : "neutral" }, expired ? "Expired" : u.expiresAt == null ? "Until resolved" : `Valid ${inFuture(u.expiresAt, now)}`));
     })) : /* @__PURE__ */ React.createElement("p", { className: "muted" }, "No report currently supports a status for this point, so it is shown as Unknown."), /* @__PURE__ */ React.createElement("p", { className: "muted", style: { fontSize: 12, marginTop: 10 } }, "Student reports expire after ", RULES.reportTtl / 36e5, " h and check-ins after ", RULES.checkinTtl / 36e5, " h. These are crowdsourced reports, not sensor readings.")), /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, "Report history")), reports.length ? /* @__PURE__ */ React.createElement("ul", { className: "feed" }, reports.slice(0, 6).map((r) => /* @__PURE__ */ React.createElement("li", { key: r.id }, /* @__PURE__ */ React.createElement("span", { className: "fi" }, /* @__PURE__ */ React.createElement(Icon, { name: categoryById(r.category).icon, size: 16 })), /* @__PURE__ */ React.createElement("div", { className: "grow" }, /* @__PURE__ */ React.createElement("b", null, categoryById(r.category).label), /* @__PURE__ */ React.createElement("small", null, ago(r.createdAt, now), " \xB7 ", /* @__PURE__ */ React.createElement("span", { className: "mono" }, r.id))), /* @__PURE__ */ React.createElement(ReportStatusTag, { s: r.status })))) : /* @__PURE__ */ React.createElement("p", { className: "muted" }, "No reports for this point yet."))), /* @__PURE__ */ React.createElement("div", { id: "alternatives", className: "stack" }, /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, needsAlt ? "Try one of these instead" : "Other points you could use")), /* @__PURE__ */ React.createElement(Alternatives, { pointId: p.id, areaId: p.areaId })))));
   }
 
   // src/student/Report.tsx
-  var import_react11 = __toESM(require_react(), 1);
+  var import_react12 = __toESM(require_react(), 1);
   async function shrink(file) {
     const url = URL.createObjectURL(file);
     try {
@@ -1710,17 +1858,17 @@ const React = window.React;
   function ReportForm({ route }) {
     const { db, now, submit, toast } = useApp();
     const back = useBack("/");
-    const [pointId, setPointId] = (0, import_react11.useState)(route.params.get("point") ?? "");
-    const [category, setCategory] = (0, import_react11.useState)(route.params.get("category") ?? "");
-    const [description, setDescription] = (0, import_react11.useState)(route.params.get("desc") ?? "");
-    const [photo, setPhoto] = (0, import_react11.useState)(null);
-    const [errors, setErrors] = (0, import_react11.useState)({});
-    const [busy, setBusy] = (0, import_react11.useState)(false);
-    const [dup, setDup] = (0, import_react11.useState)(null);
-    const [done, setDone] = (0, import_react11.useState)(null);
-    const fileRef = (0, import_react11.useRef)(null);
+    const [pointId, setPointId] = (0, import_react12.useState)(route.params.get("point") ?? "");
+    const [category, setCategory] = (0, import_react12.useState)(route.params.get("category") ?? "");
+    const [description, setDescription] = (0, import_react12.useState)(route.params.get("desc") ?? "");
+    const [photo, setPhoto] = (0, import_react12.useState)(null);
+    const [errors, setErrors] = (0, import_react12.useState)({});
+    const [busy, setBusy] = (0, import_react12.useState)(false);
+    const [dup, setDup] = (0, import_react12.useState)(null);
+    const [done, setDone] = (0, import_react12.useState)(null);
+    const fileRef = (0, import_react12.useRef)(null);
     const point = db.points.find((p) => p.id === pointId);
-    const points = (0, import_react11.useMemo)(() => db.points.filter((p) => p.active), [db.points]);
+    const points = (0, import_react12.useMemo)(() => db.points.filter((p) => p.active), [db.points]);
     const doSubmit = async (allowDuplicate = false) => {
       const v = validateReport(db, { pointId, category, description });
       if (v) {
@@ -1784,19 +1932,19 @@ const React = window.React;
   }
 
   // src/student/Activity.tsx
-  var import_react12 = __toESM(require_react(), 1);
+  var import_react13 = __toESM(require_react(), 1);
   function Photo({ id }) {
     const { getPhoto } = useApp();
-    const [src, setSrc] = (0, import_react12.useState)(null);
-    (0, import_react12.useEffect)(() => {
+    const [src, setSrc] = (0, import_react13.useState)(null);
+    (0, import_react13.useEffect)(() => {
       void getPhoto(id).then(setSrc);
     }, [id, getPhoto]);
     return src ? /* @__PURE__ */ React.createElement("img", { src, alt: "Attached by reporter", style: { maxWidth: 220, borderRadius: 12, border: "1px solid var(--line)" } }) : null;
   }
   function Activity() {
     const { db, now, user } = useApp();
-    const [f, setF] = (0, import_react12.useState)("all");
-    const [open, setOpen] = (0, import_react12.useState)(null);
+    const [f, setF] = (0, import_react13.useState)("all");
+    const [open, setOpen] = (0, import_react13.useState)(null);
     const mine = db.reports.filter((r) => r.reporterId === user.id).sort((a, b) => b.createdAt - a.createdAt);
     const list = mine.filter((r) => f === "all" || (f === "open" ? r.status !== "resolved" && r.status !== "rejected" : r.status === "resolved" || r.status === "rejected"));
     const checkins = db.activities.filter((a) => a.actorId === user.id && a.action === "checkin").length;
@@ -1846,34 +1994,34 @@ const React = window.React;
   }
 
   // src/admin/Points.tsx
-  var import_react13 = __toESM(require_react(), 1);
-  var blank = () => ({ name: "", areaId: "b25", building: "Block 25", floor: "", floorReported: "", areaType: "indoor", locationVerified: false, latitude: "", longitude: "" });
+  var import_react14 = __toESM(require_react(), 1);
+  var blank = () => ({ name: "", areaId: "b25", building: "Block 25", floor: "", floorReported: "", areaType: "indoor", locationVerified: true, latitude: "31.25620", longitude: "75.70320" });
   var toInput = (p) => ({ name: p.name, areaId: p.areaId, building: p.building, floor: p.floor ?? "", floorReported: p.floorReported ?? "", areaType: p.areaType, locationVerified: p.locationVerified, latitude: p.latitude?.toString() ?? "", longitude: p.longitude?.toString() ?? "" });
   function Points({ route }) {
     const { db, now } = useApp();
-    const [q, setQ] = (0, import_react13.useState)("");
-    const [sel, setSel] = (0, import_react13.useState)(route.params.get("open"));
-    (0, import_react13.useEffect)(() => {
+    const [q, setQ] = (0, import_react14.useState)("");
+    const [sel, setSel] = (0, import_react14.useState)(route.params.get("open"));
+    (0, import_react14.useEffect)(() => {
       const o = route.params.get("open");
       if (o) setSel(o);
     }, [route.params.toString()]);
-    const views = (0, import_react13.useMemo)(() => pointViews(db, now, true).filter((v) => !q.trim() || `${v.point.name} ${v.point.building} ${v.point.id}`.toLowerCase().includes(q.trim().toLowerCase())), [db, now, q]);
+    const views = (0, import_react14.useMemo)(() => pointViews(db, now, true).filter((v) => !q.trim() || `${v.point.name} ${v.point.building} ${v.point.id}`.toLowerCase().includes(q.trim().toLowerCase())), [db, now, q]);
     const close = () => {
       setSel(null);
       if (route.params.get("open")) go("/admin/points");
     };
     return /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement(PageHeader, { title: "Water points", sub: "Register points, correct their location details and set maintenance status.", actions: /* @__PURE__ */ React.createElement(Button, { variant: "primary", icon: "plus", onClick: () => setSel("new") }, "Add water point") }), /* @__PURE__ */ React.createElement("input", { className: "input", style: { maxWidth: 360 }, type: "search", placeholder: "Search points", "aria-label": "Search water points", value: q, onChange: (e) => setQ(e.target.value) }), views.length ? /* @__PURE__ */ React.createElement("div", { className: "tablewrap" }, /* @__PURE__ */ React.createElement("table", { className: "t" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Point"), /* @__PURE__ */ React.createElement("th", null, "Building \xB7 floor"), /* @__PURE__ */ React.createElement("th", null, "Status"), /* @__PURE__ */ React.createElement("th", null, "Location"), /* @__PURE__ */ React.createElement("th", null, "Active"), /* @__PURE__ */ React.createElement("th", null))), /* @__PURE__ */ React.createElement("tbody", null, views.map(({ point: p, status: s }) => /* @__PURE__ */ React.createElement("tr", { key: p.id, className: p.active ? "" : "inactive", tabIndex: 0, onClick: () => setSel(p.id), onKeyDown: (e) => {
       if (e.key === "Enter") setSel(p.id);
-    } }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("b", null, p.name), " ", p.isDemo && /* @__PURE__ */ React.createElement(DemoTag, null), /* @__PURE__ */ React.createElement("div", { className: "mono muted", style: { fontSize: 11.5 } }, p.id)), /* @__PURE__ */ React.createElement("td", null, p.building, /* @__PURE__ */ React.createElement("div", { className: "muted", style: { fontSize: 12.5 } }, floorText(p))), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(StatusBadge, { s, size: "sm" })), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(Tag, { tone: p.locationVerified ? "green" : "amber" }, p.locationVerified ? "Verified" : "Unverified")), /* @__PURE__ */ React.createElement("td", null, p.active ? "Yes" : /* @__PURE__ */ React.createElement(Tag, { tone: "rose" }, "Inactive")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 16 }))))))) : /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement(EmptyState, { icon: "droplet", title: db.points.length ? "No points match your search" : "No water points yet", action: /* @__PURE__ */ React.createElement(Button, { variant: "primary", icon: "plus", onClick: () => setSel("new") }, "Add the first water point") }, "Add points with provisional names until their exact location is verified on site.")), sel && /* @__PURE__ */ React.createElement(PointDrawer, { id: sel, onClose: close }));
+    } }, /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement("b", null, p.name), " ", p.isDemo && /* @__PURE__ */ React.createElement(DemoTag, null), /* @__PURE__ */ React.createElement("div", { className: "mono muted", style: { fontSize: 11.5 } }, p.id)), /* @__PURE__ */ React.createElement("td", null, p.building, /* @__PURE__ */ React.createElement("div", { className: "muted", style: { fontSize: 12.5 } }, floorText(p))), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(StatusBadge, { s, size: "sm" })), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(Tag, { tone: p.locationVerified ? "green" : "amber" }, p.locationVerified ? "Confirmed" : "Unconfirmed")), /* @__PURE__ */ React.createElement("td", null, p.active ? "Yes" : /* @__PURE__ */ React.createElement(Tag, { tone: "rose" }, "Inactive")), /* @__PURE__ */ React.createElement("td", null, /* @__PURE__ */ React.createElement(Icon, { name: "chevron", size: 16 }))))))) : /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement(EmptyState, { icon: "droplet", title: db.points.length ? "No points match your search" : "No water points yet", action: /* @__PURE__ */ React.createElement(Button, { variant: "primary", icon: "plus", onClick: () => setSel("new") }, "Add the first water point") }, "Add points with provisional names until their exact location is verified on site.")), sel && /* @__PURE__ */ React.createElement(PointDrawer, { id: sel, onClose: close }));
   }
   function PointDrawer({ id, onClose }) {
     const { db, now, admin } = useApp();
     const existing = id === "new" ? void 0 : db.points.find((p) => p.id === id);
-    const [f, setF] = (0, import_react13.useState)(existing ? toInput(existing) : blank());
-    const [err, setErr] = (0, import_react13.useState)("");
-    const [confirm, setConfirm] = (0, import_react13.useState)(null);
-    const [stNote, setStNote] = (0, import_react13.useState)("");
-    (0, import_react13.useEffect)(() => {
+    const [f, setF] = (0, import_react14.useState)(existing ? toInput(existing) : blank());
+    const [err, setErr] = (0, import_react14.useState)("");
+    const [confirm, setConfirm] = (0, import_react14.useState)(null);
+    const [stNote, setStNote] = (0, import_react14.useState)("");
+    (0, import_react14.useEffect)(() => {
       if (existing) setF(toInput(existing));
     }, [existing?.updatedAt]);
     if (id !== "new" && !existing) return null;
@@ -1899,20 +2047,26 @@ const React = window.React;
     return /* @__PURE__ */ React.createElement(Drawer, { title: existing ? "Manage water point" : "Add water point", onClose, footer: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button, { variant: "ghost", onClick: onClose }, "Cancel"), /* @__PURE__ */ React.createElement(Button, { variant: "primary", onClick: save }, existing ? "Save changes" : "Add point")) }, /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, err && /* @__PURE__ */ React.createElement(Notice, { tone: "danger" }, err), /* @__PURE__ */ React.createElement("div", { className: "formgrid" }, /* @__PURE__ */ React.createElement(Field, { label: "Point name", htmlFor: "pn", hint: "e.g. \u201CBlock 34 \u2014 Cooler C\u201D." }, /* @__PURE__ */ React.createElement("input", { id: "pn", "data-autofocus": true, className: "input", value: f.name, onChange: (e) => set2("name", e.target.value) })), /* @__PURE__ */ React.createElement("div", { className: "formgrid c2" }, /* @__PURE__ */ React.createElement(Field, { label: "Campus area", htmlFor: "pa" }, /* @__PURE__ */ React.createElement("select", { id: "pa", className: "select", value: f.areaId, onChange: (e) => {
       set2("areaId", e.target.value);
       const a = areaById(e.target.value);
-      if (a && a.id !== "other") set2("building", a.name);
-    } }, CAMPUS_AREAS.map((a) => /* @__PURE__ */ React.createElement("option", { key: a.id, value: a.id }, a.name)))), /* @__PURE__ */ React.createElement(Field, { label: "Building / landmark", htmlFor: "pb" }, /* @__PURE__ */ React.createElement("input", { id: "pb", className: "input", value: f.building, onChange: (e) => set2("building", e.target.value) })), /* @__PURE__ */ React.createElement(Field, { label: "Verified floor", htmlFor: "pf", hint: "Leave empty if not verified." }, /* @__PURE__ */ React.createElement("input", { id: "pf", className: "input", value: f.floor, onChange: (e) => set2("floor", e.target.value), placeholder: "e.g. 2" })), /* @__PURE__ */ React.createElement(Field, { label: "Team-reported floor", htmlFor: "pr", hint: "Shown as \u201Cnot verified\u201D." }, /* @__PURE__ */ React.createElement("input", { id: "pr", className: "input", value: f.floorReported ?? "", onChange: (e) => set2("floorReported", e.target.value), placeholder: "e.g. 2nd floor" })), /* @__PURE__ */ React.createElement(Field, { label: "Indoor / outdoor", htmlFor: "pt" }, /* @__PURE__ */ React.createElement("select", { id: "pt", className: "select", value: f.areaType, onChange: (e) => set2("areaType", e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "indoor" }, "Indoor"), /* @__PURE__ */ React.createElement("option", { value: "outdoor" }, "Outdoor"), /* @__PURE__ */ React.createElement("option", { value: "unverified" }, "Not verified"))), /* @__PURE__ */ React.createElement("div", null), /* @__PURE__ */ React.createElement(Field, { label: "Latitude (optional)", htmlFor: "pla" }, /* @__PURE__ */ React.createElement("input", { id: "pla", className: "input", inputMode: "decimal", value: f.latitude, onChange: (e) => set2("latitude", e.target.value) })), /* @__PURE__ */ React.createElement(Field, { label: "Longitude (optional)", htmlFor: "plo" }, /* @__PURE__ */ React.createElement("input", { id: "plo", className: "input", inputMode: "decimal", value: f.longitude, onChange: (e) => set2("longitude", e.target.value) }))), /* @__PURE__ */ React.createElement("label", { className: "switch" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: f.locationVerified, onChange: (e) => set2("locationVerified", e.target.checked) }), /* @__PURE__ */ React.createElement("span", { className: "tr" }), "Location verified on site")), existing && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", { style: { marginBottom: 8 } }, "Maintenance status"), derived && /* @__PURE__ */ React.createElement("div", { className: "row wrap", style: { marginBottom: 8 } }, /* @__PURE__ */ React.createElement(StatusBadge, { s: derived }), /* @__PURE__ */ React.createElement("span", { className: "muted", style: { fontSize: 12.5 } }, derived.source)), /* @__PURE__ */ React.createElement("input", { className: "input", "aria-label": "Staff status note", placeholder: "Note (optional)", value: stNote, onChange: (e) => setStNote(e.target.value) }), /* @__PURE__ */ React.createElement("div", { className: "row wrap", style: { marginTop: 8 } }, /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "success", onClick: () => setStatus("AVAILABLE") }, "Working"), /* @__PURE__ */ React.createElement(Button, { size: "sm", onClick: () => setStatus("NEEDS_ATTENTION") }, "Needs attention"), /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "danger", onClick: () => setStatus("REPORTED_UNAVAILABLE") }, "Out of service")), /* @__PURE__ */ React.createElement("p", { className: "muted", style: { fontSize: 12, marginTop: 6 } }, "A staff check replaces earlier staff records. \u201CWorking\u201D expires after 24 h.")), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", { style: { marginBottom: 8 } }, "Report history (", reports.length, ")"), reports.length ? /* @__PURE__ */ React.createElement("ul", { className: "feed" }, reports.map((r) => /* @__PURE__ */ React.createElement("li", { key: r.id }, /* @__PURE__ */ React.createElement("div", { className: "grow" }, /* @__PURE__ */ React.createElement("a", { className: "mono", href: `#/admin/reports/${r.id}` }, r.id), /* @__PURE__ */ React.createElement("small", null, categoryById(r.category).label, " \xB7 ", ago(r.createdAt, now))), /* @__PURE__ */ React.createElement(ReportStatusTag, { s: r.status })))) : /* @__PURE__ */ React.createElement("p", { className: "muted" }, "No reports.")), /* @__PURE__ */ React.createElement("div", { className: "row wrap" }, existing.active ? /* @__PURE__ */ React.createElement(Button, { variant: "danger", icon: "x-circle", onClick: () => setConfirm("deactivate") }, "Deactivate") : /* @__PURE__ */ React.createElement(Button, { variant: "success", icon: "check-circle", onClick: () => admin((d, a, n) => setPointActive(d, existing.id, true, a, n), "Point activated.") }, "Activate"), /* @__PURE__ */ React.createElement(Button, { variant: "danger", icon: "trash", onClick: () => setConfirm("delete") }, "Delete")))), confirm === "deactivate" && existing && /* @__PURE__ */ React.createElement(ConfirmDialog, { danger: true, title: "Deactivate this point?", confirmLabel: "Deactivate", onClose: () => setConfirm(null), body: /* @__PURE__ */ React.createElement("p", null, existing.name, " will be hidden from students and stop accepting reports. Its history is kept and you can activate it again."), onConfirm: () => admin((d, a, n) => setPointActive(d, existing.id, false, a, n), "Point deactivated.") }), confirm === "delete" && existing && /* @__PURE__ */ React.createElement(ConfirmDialog, { danger: true, title: "Delete this point permanently?", confirmLabel: "Delete point", onClose: () => setConfirm(null), body: /* @__PURE__ */ React.createElement("p", null, "This cannot be undone. Points that have report history can\u2019t be deleted \u2014 deactivate them instead."), onConfirm: () => {
+      if (a && a.id !== "other") {
+        set2("building", a.name);
+        if (!f.latitude) {
+          set2("latitude", a.center.lat.toFixed(5));
+          set2("longitude", a.center.lng.toFixed(5));
+        }
+      }
+    } }, CAMPUS_AREAS.map((a) => /* @__PURE__ */ React.createElement("option", { key: a.id, value: a.id }, a.name)))), /* @__PURE__ */ React.createElement(Field, { label: "Building / landmark", htmlFor: "pb" }, /* @__PURE__ */ React.createElement("input", { id: "pb", className: "input", value: f.building, onChange: (e) => set2("building", e.target.value) })), /* @__PURE__ */ React.createElement(Field, { label: "Floor", htmlFor: "pf", hint: "Number (2) or text (Ground). Empty for outdoor." }, /* @__PURE__ */ React.createElement("input", { id: "pf", className: "input", value: f.floor, onChange: (e) => set2("floor", e.target.value), placeholder: "e.g. 2" })), /* @__PURE__ */ React.createElement(Field, { label: "Indoor / outdoor", htmlFor: "pt" }, /* @__PURE__ */ React.createElement("select", { id: "pt", className: "select", value: f.areaType, onChange: (e) => set2("areaType", e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "indoor" }, "Indoor"), /* @__PURE__ */ React.createElement("option", { value: "outdoor" }, "Outdoor"), /* @__PURE__ */ React.createElement("option", { value: "unverified" }, "Not verified"))), /* @__PURE__ */ React.createElement("div", null), /* @__PURE__ */ React.createElement(Field, { label: "Latitude (optional)", htmlFor: "pla" }, /* @__PURE__ */ React.createElement("input", { id: "pla", className: "input", inputMode: "decimal", value: f.latitude, onChange: (e) => set2("latitude", e.target.value) })), /* @__PURE__ */ React.createElement(Field, { label: "Longitude (optional)", htmlFor: "plo" }, /* @__PURE__ */ React.createElement("input", { id: "plo", className: "input", inputMode: "decimal", value: f.longitude, onChange: (e) => set2("longitude", e.target.value) }))), /* @__PURE__ */ React.createElement("label", { className: "switch" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: f.locationVerified, onChange: (e) => set2("locationVerified", e.target.checked) }), /* @__PURE__ */ React.createElement("span", { className: "tr" }), "Location confirmed on site")), existing && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", { style: { marginBottom: 8 } }, "Maintenance status"), derived && /* @__PURE__ */ React.createElement("div", { className: "row wrap", style: { marginBottom: 8 } }, /* @__PURE__ */ React.createElement(StatusBadge, { s: derived }), /* @__PURE__ */ React.createElement("span", { className: "muted", style: { fontSize: 12.5 } }, derived.source)), /* @__PURE__ */ React.createElement("input", { className: "input", "aria-label": "Staff status note", placeholder: "Note (optional)", value: stNote, onChange: (e) => setStNote(e.target.value) }), /* @__PURE__ */ React.createElement("div", { className: "row wrap", style: { marginTop: 8 } }, /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "success", onClick: () => setStatus("AVAILABLE") }, "Working"), /* @__PURE__ */ React.createElement(Button, { size: "sm", onClick: () => setStatus("NEEDS_ATTENTION") }, "Needs attention"), /* @__PURE__ */ React.createElement(Button, { size: "sm", variant: "danger", onClick: () => setStatus("REPORTED_UNAVAILABLE") }, "Out of service")), /* @__PURE__ */ React.createElement("p", { className: "muted", style: { fontSize: 12, marginTop: 6 } }, "A staff check replaces earlier staff records. \u201CWorking\u201D expires after 24 h.")), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h3", { style: { marginBottom: 8 } }, "Report history (", reports.length, ")"), reports.length ? /* @__PURE__ */ React.createElement("ul", { className: "feed" }, reports.map((r) => /* @__PURE__ */ React.createElement("li", { key: r.id }, /* @__PURE__ */ React.createElement("div", { className: "grow" }, /* @__PURE__ */ React.createElement("a", { className: "mono", href: `#/admin/reports/${r.id}` }, r.id), /* @__PURE__ */ React.createElement("small", null, categoryById(r.category).label, " \xB7 ", ago(r.createdAt, now))), /* @__PURE__ */ React.createElement(ReportStatusTag, { s: r.status })))) : /* @__PURE__ */ React.createElement("p", { className: "muted" }, "No reports.")), /* @__PURE__ */ React.createElement("div", { className: "row wrap" }, existing.active ? /* @__PURE__ */ React.createElement(Button, { variant: "danger", icon: "x-circle", onClick: () => setConfirm("deactivate") }, "Deactivate") : /* @__PURE__ */ React.createElement(Button, { variant: "success", icon: "check-circle", onClick: () => admin((d, a, n) => setPointActive(d, existing.id, true, a, n), "Point activated.") }, "Activate"), /* @__PURE__ */ React.createElement(Button, { variant: "danger", icon: "trash", onClick: () => setConfirm("delete") }, "Delete")))), confirm === "deactivate" && existing && /* @__PURE__ */ React.createElement(ConfirmDialog, { danger: true, title: "Deactivate this point?", confirmLabel: "Deactivate", onClose: () => setConfirm(null), body: /* @__PURE__ */ React.createElement("p", null, existing.name, " will be hidden from students and stop accepting reports. Its history is kept and you can activate it again."), onConfirm: () => admin((d, a, n) => setPointActive(d, existing.id, false, a, n), "Point deactivated.") }), confirm === "delete" && existing && /* @__PURE__ */ React.createElement(ConfirmDialog, { danger: true, title: "Delete this point permanently?", confirmLabel: "Delete point", onClose: () => setConfirm(null), body: /* @__PURE__ */ React.createElement("p", null, "This cannot be undone. Points that have report history can\u2019t be deleted \u2014 deactivate them instead."), onConfirm: () => {
       if (admin((d, a, n) => deletePoint(d, existing.id, a, n), "Point deleted.")) onClose();
     } }));
   }
 
   // src/admin/Reports.tsx
-  var import_react14 = __toESM(require_react(), 1);
+  var import_react15 = __toESM(require_react(), 1);
   function Reports() {
     const { db, now } = useApp();
-    const [st, setSt] = (0, import_react14.useState)("all");
-    const [cat, setCat] = (0, import_react14.useState)("all");
-    const [q, setQ] = (0, import_react14.useState)("");
-    const rows = (0, import_react14.useMemo)(() => db.reports.filter((r) => (st === "all" || r.status === st) && (cat === "all" || r.category === cat) && (!q.trim() || (r.id + " " + (db.points.find((p) => p.id === r.waterPointId)?.name ?? "") + " " + r.description).toLowerCase().includes(q.trim().toLowerCase()))).sort((a, b) => b.createdAt - a.createdAt), [db, st, cat, q]);
+    const [st, setSt] = (0, import_react15.useState)("all");
+    const [cat, setCat] = (0, import_react15.useState)("all");
+    const [q, setQ] = (0, import_react15.useState)("");
+    const rows = (0, import_react15.useMemo)(() => db.reports.filter((r) => (st === "all" || r.status === st) && (cat === "all" || r.category === cat) && (!q.trim() || (r.id + " " + (db.points.find((p) => p.id === r.waterPointId)?.name ?? "") + " " + r.description).toLowerCase().includes(q.trim().toLowerCase()))).sort((a, b) => b.createdAt - a.createdAt), [db, st, cat, q]);
     const n = (s) => db.reports.filter((r) => r.status === s).length;
     return /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement(PageHeader, { title: "Reports", sub: "Review, verify, reject and resolve student reports. Every action is logged." }), /* @__PURE__ */ React.createElement("div", { className: "filters" }, /* @__PURE__ */ React.createElement("div", { className: "filter-row" }, /* @__PURE__ */ React.createElement("input", { className: "input", style: { maxWidth: 320 }, type: "search", placeholder: "Search by report ID, point or text", "aria-label": "Search reports", value: q, onChange: (e) => setQ(e.target.value) }), /* @__PURE__ */ React.createElement("select", { className: "select", style: { maxWidth: 260 }, "aria-label": "Filter by issue type", value: cat, onChange: (e) => setCat(e.target.value) }, /* @__PURE__ */ React.createElement("option", { value: "all" }, "All issue types"), CATEGORIES.map((c) => /* @__PURE__ */ React.createElement("option", { key: c.id, value: c.id }, c.label)))), /* @__PURE__ */ React.createElement(Chips, { label: "Filter by status", value: st, onChange: setSt, options: [{ value: "all", label: "All", count: db.reports.length }, { value: "submitted", label: "Submitted", count: n("submitted") }, { value: "under_review", label: "Under review", count: n("under_review") }, { value: "verified", label: "Verified", count: n("verified") }, { value: "rejected", label: "Rejected", count: n("rejected") }, { value: "resolved", label: "Resolved", count: n("resolved") }] })), rows.length ? /* @__PURE__ */ React.createElement("div", { className: "tablewrap" }, /* @__PURE__ */ React.createElement("table", { className: "t" }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Report ID"), /* @__PURE__ */ React.createElement("th", null, "Issue"), /* @__PURE__ */ React.createElement("th", null, "Water point"), /* @__PURE__ */ React.createElement("th", null, "Status"), /* @__PURE__ */ React.createElement("th", null, "Submitted"), /* @__PURE__ */ React.createElement("th", null))), /* @__PURE__ */ React.createElement("tbody", null, rows.map((r) => {
       const p = db.points.find((x) => x.id === r.waterPointId);
@@ -1928,10 +2082,10 @@ const React = window.React;
   function ReportDetail({ id }) {
     const { db, now, admin } = useApp();
     const back = useBack("/admin/reports");
-    const [modal, setModal] = (0, import_react14.useState)(null);
-    const [text, setText] = (0, import_react14.useState)("");
-    const [err, setErr] = (0, import_react14.useState)("");
-    const [note, setNote] = (0, import_react14.useState)("");
+    const [modal, setModal] = (0, import_react15.useState)(null);
+    const [text, setText] = (0, import_react15.useState)("");
+    const [err, setErr] = (0, import_react15.useState)("");
+    const [note, setNote] = (0, import_react15.useState)("");
     const r = db.reports.find((x) => x.id === id);
     if (!r) return /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement(EmptyState, { icon: "clipboard", title: "Report not found", action: /* @__PURE__ */ React.createElement(Button, { variant: "primary", onClick: () => go("/admin/reports") }, "Back to reports") }));
     const p = db.points.find((x) => x.id === r.waterPointId);
@@ -1971,7 +2125,7 @@ const React = window.React;
   }
 
   // src/admin/Analytics.tsx
-  var import_react15 = __toESM(require_react(), 1);
+  var import_react16 = __toESM(require_react(), 1);
 
   // src/ui/charts.tsx
   function HBars({ data, empty = "No data yet" }) {
@@ -2021,8 +2175,8 @@ const React = window.React;
   var NAME = { submitted: "Submitted", under_review: "Under review", verified: "Verified", rejected: "Rejected", resolved: "Resolved" };
   function Analytics() {
     const { db, now } = useApp();
-    const [demo] = (0, import_react15.useState)(true);
-    const a = (0, import_react15.useMemo)(() => analytics(db, now, demo), [db, now, demo]);
+    const [demo] = (0, import_react16.useState)(true);
+    const a = (0, import_react16.useMemo)(() => analytics(db, now, demo), [db, now, demo]);
     const hasDemo = false;
     return /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement(
       PageHeader,
@@ -2035,22 +2189,22 @@ const React = window.React;
   }
 
   // src/admin/ActivityLog.tsx
-  var import_react16 = __toESM(require_react(), 1);
+  var import_react17 = __toESM(require_react(), 1);
   function ActivityLog() {
     const { db } = useApp();
-    const [q, setQ] = (0, import_react16.useState)("");
+    const [q, setQ] = (0, import_react17.useState)("");
     const rows = [...db.activities].sort((a, b) => b.createdAt - a.createdAt).filter((a) => !q.trim() || `${a.details} ${a.action} ${a.targetId} ${userName(db, a.actorId)}`.toLowerCase().includes(q.trim().toLowerCase()));
     return /* @__PURE__ */ React.createElement("div", { className: "stack-lg" }, /* @__PURE__ */ React.createElement(PageHeader, { title: "Activity log", sub: "Every admin action and student submission creates a record here." }), /* @__PURE__ */ React.createElement("input", { className: "input", style: { maxWidth: 360 }, type: "search", "aria-label": "Search activity", placeholder: "Search activity", value: q, onChange: (e) => setQ(e.target.value) }), /* @__PURE__ */ React.createElement(Card, null, rows.length ? /* @__PURE__ */ React.createElement("ul", { className: "feed" }, rows.slice(0, 150).map((a) => /* @__PURE__ */ React.createElement("li", { key: a.id }, /* @__PURE__ */ React.createElement("span", { className: "fi" }, /* @__PURE__ */ React.createElement(Icon, { name: actIcon(a.action), size: 15 })), /* @__PURE__ */ React.createElement("div", { className: "grow" }, a.details, /* @__PURE__ */ React.createElement("small", null, /* @__PURE__ */ React.createElement("span", { className: "mono" }, a.action), " \xB7 ", userName(db, a.actorId), " \xB7 ", fmtDateTime(a.createdAt), " ")), a.targetType !== "system" && /* @__PURE__ */ React.createElement("button", { className: "btn btn-sm btn-ghost", onClick: () => go(a.targetType === "report" ? `/admin/reports/${a.targetId}` : `/admin/points?open=${a.targetId}`) }, "Open")))) : /* @__PURE__ */ React.createElement(EmptyState, { icon: "activity", title: "No matching activity" })));
   }
 
   // src/admin/Login.tsx
-  var import_react17 = __toESM(require_react(), 1);
+  var import_react18 = __toESM(require_react(), 1);
   function AdminLogin() {
     const { login } = useApp();
-    const [u, setU] = (0, import_react17.useState)("");
-    const [p, setP] = (0, import_react17.useState)("");
-    const [err, setErr] = (0, import_react17.useState)("");
-    const [show, setShow] = (0, import_react17.useState)(false);
+    const [u, setU] = (0, import_react18.useState)("");
+    const [p, setP] = (0, import_react18.useState)("");
+    const [err, setErr] = (0, import_react18.useState)("");
+    const [show, setShow] = (0, import_react18.useState)(false);
     const submit = (e) => {
       e.preventDefault();
       if (!u.trim() || !p) {
@@ -2069,10 +2223,10 @@ const React = window.React;
   }
 
   // src/admin/Settings.tsx
-  var import_react18 = __toESM(require_react(), 1);
+  var import_react19 = __toESM(require_react(), 1);
   function Settings() {
     const { db, resetDemo, clearAllData, logout } = useApp();
-    const [c, setC] = (0, import_react18.useState)(null);
+    const [c, setC] = (0, import_react19.useState)(null);
     return /* @__PURE__ */ React.createElement("div", { className: "stack-lg", style: { maxWidth: 760 } }, /* @__PURE__ */ React.createElement(PageHeader, { title: "Settings", sub: "Data management and session." }), /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, "Data")), /* @__PURE__ */ React.createElement("p", { className: "sub", style: { marginTop: 0 } }, db.points.length, " water points \xB7 ", db.reports.length, " reports \xB7 ", db.activities.length, " activity records. Data is stored in this browser only."), /* @__PURE__ */ React.createElement("div", { className: "row wrap", style: { marginTop: 14 } }, /* @__PURE__ */ React.createElement(Button, { icon: "refresh", onClick: () => setC("reset") }, "Restore sample data"), /* @__PURE__ */ React.createElement(Button, { variant: "danger", icon: "trash", onClick: () => setC("clear") }, "Erase everything")), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 14 } }, /* @__PURE__ */ React.createElement(Notice, null, "Restoring brings back the starter points and reports and removes anything you added. Erasing leaves an empty system."))), /* @__PURE__ */ React.createElement(Card, null, /* @__PURE__ */ React.createElement("div", { className: "card-h" }, /* @__PURE__ */ React.createElement("h2", null, "Session")), /* @__PURE__ */ React.createElement(Button, { icon: "lock", onClick: logout }, "Sign out")), c === "reset" && /* @__PURE__ */ React.createElement(ConfirmDialog, { danger: true, title: "Restore sample data?", confirmLabel: "Restore", onClose: () => setC(null), body: /* @__PURE__ */ React.createElement("p", null, "All reports, points and notifications you created will be replaced by the starter dataset."), onConfirm: () => {
       void resetDemo();
     } }), c === "clear" && /* @__PURE__ */ React.createElement(ConfirmDialog, { danger: true, title: "Erase all data?", confirmLabel: "Erase everything", onClose: () => setC(null), body: /* @__PURE__ */ React.createElement("p", null, "Every water point, report and activity record will be deleted. This cannot be undone."), onConfirm: () => {
@@ -2088,7 +2242,7 @@ const React = window.React;
     const route = useRoute();
     const { db, role, prefs, setPrefs, switchRole, loading, user, online, adminAuthed, logout } = useApp();
     const isAdminRoute = route.parts[0] === "admin";
-    (0, import_react19.useEffect)(() => {
+    (0, import_react20.useEffect)(() => {
       if (isAdminRoute && role !== "admin") setPrefs({ role: "admin" });
       if (!isAdminRoute && role !== "student") setPrefs({ role: "student" });
     }, [isAdminRoute, role, setPrefs]);
@@ -2134,7 +2288,7 @@ const React = window.React;
     else if (a === "notifications") page = /* @__PURE__ */ React.createElement(Notifications, null);
     else if (a === "status-guide") page = /* @__PURE__ */ React.createElement(Guide, null);
     else page = /* @__PURE__ */ React.createElement(Home, null);
-    return /* @__PURE__ */ React.createElement("div", { className: "shell" }, /* @__PURE__ */ React.createElement("a", { className: "skip", href: "#main" }, "Skip to content"), /* @__PURE__ */ React.createElement("aside", { className: "side", "aria-label": "Primary" }, /* @__PURE__ */ React.createElement(Brand, { sub: isAdminRoute ? "Admin console" : "Smart Campus Refill Network" }), /* @__PURE__ */ React.createElement("nav", { className: "nav", "aria-label": isAdminRoute ? "Admin" : "Student" }, (!isAdminRoute || adminAuthed) && nav.map((n) => /* @__PURE__ */ React.createElement("a", { key: n.to, href: href(n.to), "aria-current": curAttr(n.to) }, /* @__PURE__ */ React.createElement(Icon, { name: n.icon, size: 19 }), n.label, !!n.n && /* @__PURE__ */ React.createElement("span", { className: "tag tag-rose badge" }, n.n))), !isAdminRoute && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "nav-sec" }, "Learn"), /* @__PURE__ */ React.createElement("a", { href: href("/status-guide"), "aria-current": curAttr("/status-guide") }, /* @__PURE__ */ React.createElement(Icon, { name: "info", size: 19 }), "How statuses work"))), /* @__PURE__ */ React.createElement("div", { style: { marginTop: "auto" }, className: "stack" }, isAdminRoute && adminAuthed ? /* @__PURE__ */ React.createElement(Button, { icon: "lock", onClick: logout }, "Sign out") : null, /* @__PURE__ */ React.createElement("p", { className: "muted", style: { fontSize: 11.5 } }, "INT335 \xB7 P16 The Empty Bottle Problem", /* @__PURE__ */ React.createElement("br", null), "Student project \u2014 not an official LPU service."))), /* @__PURE__ */ React.createElement("div", { className: "main" }, !online && /* @__PURE__ */ React.createElement("div", { className: "protobar" }, /* @__PURE__ */ React.createElement(Icon, { name: "wifi-off", size: 14 }), /* @__PURE__ */ React.createElement("span", null, "You\u2019re offline \u2014 browsing cached point information. Reports are saved locally.")), /* @__PURE__ */ React.createElement("header", { className: "topbar" }, /* @__PURE__ */ React.createElement("div", { className: "brand-sm" }, /* @__PURE__ */ React.createElement(Brand, { sub: "" })), /* @__PURE__ */ React.createElement("div", { className: "top-actions" }, /* @__PURE__ */ React.createElement(Segmented, { label: "Experience", value: role, onChange: switchRole, options: [{ value: "student", label: "Student", icon: "user" }, { value: "admin", label: "Admin", icon: "wrench" }] }), /* @__PURE__ */ React.createElement("button", { className: "icon-btn", "aria-label": `Switch to ${prefs.theme === "dark" ? "light" : "dark"} theme`, onClick: () => setPrefs({ theme: prefs.theme === "dark" ? "light" : "dark" }) }, /* @__PURE__ */ React.createElement(Icon, { name: prefs.theme === "dark" ? "sun" : "moon" })), /* @__PURE__ */ React.createElement("a", { className: "icon-btn", "aria-label": `Notifications${unread ? `, ${unread} unread` : ""}`, href: href(isAdminRoute ? "/admin/notifications" : "/notifications") }, /* @__PURE__ */ React.createElement(Icon, { name: "bell" }), unread > 0 && /* @__PURE__ */ React.createElement("span", { className: "dot" }, unread)))), isAdminRoute && adminAuthed && /* @__PURE__ */ React.createElement("nav", { className: "admin-tabs", "aria-label": "Admin sections" }, navA.map((n) => /* @__PURE__ */ React.createElement("a", { key: n.to, href: href(n.to), "aria-current": curAttr(n.to) }, /* @__PURE__ */ React.createElement(Icon, { name: n.icon, size: 16 }), n.label, !!n.n && /* @__PURE__ */ React.createElement("span", { className: "tag tag-rose" }, n.n)))), /* @__PURE__ */ React.createElement("main", { id: "main", className: "content", tabIndex: -1, key: route.path }, /* @__PURE__ */ React.createElement("div", { className: "page-in" }, page))), !isAdminRoute && /* @__PURE__ */ React.createElement("nav", { className: "tabbar", "aria-label": "Student navigation" }, navS.map((n) => /* @__PURE__ */ React.createElement("a", { key: n.to, href: href(n.to), className: n.fab ? "fab" : "", "aria-current": curAttr(n.to) }, n.fab ? /* @__PURE__ */ React.createElement("span", { className: "fab-i" }, /* @__PURE__ */ React.createElement(Icon, { name: n.icon, size: 22 })) : /* @__PURE__ */ React.createElement(Icon, { name: n.icon, size: 21 }), n.label, !!n.n && /* @__PURE__ */ React.createElement("span", { className: "dot" }, n.n)))), /* @__PURE__ */ React.createElement(ToastHost, null));
+    return /* @__PURE__ */ React.createElement("div", { className: "shell" }, /* @__PURE__ */ React.createElement("a", { className: "skip", href: "#main" }, "Skip to content"), /* @__PURE__ */ React.createElement("aside", { className: "side", "aria-label": "Primary" }, /* @__PURE__ */ React.createElement(Brand, { sub: isAdminRoute ? "Admin console" : "Smart Campus Refill Network" }), /* @__PURE__ */ React.createElement("nav", { className: "nav", "aria-label": isAdminRoute ? "Admin" : "Student" }, (!isAdminRoute || adminAuthed) && nav.map((n) => /* @__PURE__ */ React.createElement("a", { key: n.to, href: href(n.to), "aria-current": curAttr(n.to) }, /* @__PURE__ */ React.createElement(Icon, { name: n.icon, size: 19 }), n.label, !!n.n && /* @__PURE__ */ React.createElement("span", { className: "tag tag-rose badge" }, n.n))), !isAdminRoute && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "nav-sec" }, "Learn"), /* @__PURE__ */ React.createElement("a", { href: href("/status-guide"), "aria-current": curAttr("/status-guide") }, /* @__PURE__ */ React.createElement(Icon, { name: "info", size: 19 }), "How statuses work"))), /* @__PURE__ */ React.createElement("div", { style: { marginTop: "auto" }, className: "stack" }, isAdminRoute && adminAuthed ? /* @__PURE__ */ React.createElement(Button, { icon: "lock", onClick: logout }, "Sign out") : null, /* @__PURE__ */ React.createElement("p", { className: "muted", style: { fontSize: 11.5 } }, "INT335 \xB7 P16 The Empty Bottle Problem", /* @__PURE__ */ React.createElement("br", null), "Lovely Professional University, Phagwara."))), /* @__PURE__ */ React.createElement("div", { className: "main" }, !online && /* @__PURE__ */ React.createElement("div", { className: "protobar" }, /* @__PURE__ */ React.createElement(Icon, { name: "wifi-off", size: 14 }), /* @__PURE__ */ React.createElement("span", null, "You\u2019re offline \u2014 browsing cached point information. Reports are saved locally.")), /* @__PURE__ */ React.createElement("header", { className: "topbar" }, /* @__PURE__ */ React.createElement("div", { className: "brand-sm" }, /* @__PURE__ */ React.createElement(Brand, { sub: "" })), /* @__PURE__ */ React.createElement("div", { className: "top-actions" }, /* @__PURE__ */ React.createElement(Segmented, { label: "Experience", value: role, onChange: switchRole, options: [{ value: "student", label: "Student", icon: "user" }, { value: "admin", label: "Admin", icon: "wrench" }] }), /* @__PURE__ */ React.createElement("button", { className: "icon-btn", "aria-label": `Switch to ${prefs.theme === "dark" ? "light" : "dark"} theme`, onClick: () => setPrefs({ theme: prefs.theme === "dark" ? "light" : "dark" }) }, /* @__PURE__ */ React.createElement(Icon, { name: prefs.theme === "dark" ? "sun" : "moon" })), /* @__PURE__ */ React.createElement("a", { className: "icon-btn", "aria-label": `Notifications${unread ? `, ${unread} unread` : ""}`, href: href(isAdminRoute ? "/admin/notifications" : "/notifications") }, /* @__PURE__ */ React.createElement(Icon, { name: "bell" }), unread > 0 && /* @__PURE__ */ React.createElement("span", { className: "dot" }, unread)))), isAdminRoute && adminAuthed && /* @__PURE__ */ React.createElement("nav", { className: "admin-tabs", "aria-label": "Admin sections" }, navA.map((n) => /* @__PURE__ */ React.createElement("a", { key: n.to, href: href(n.to), "aria-current": curAttr(n.to) }, /* @__PURE__ */ React.createElement(Icon, { name: n.icon, size: 16 }), n.label, !!n.n && /* @__PURE__ */ React.createElement("span", { className: "tag tag-rose" }, n.n)))), /* @__PURE__ */ React.createElement("main", { id: "main", className: "content", tabIndex: -1, key: route.path }, /* @__PURE__ */ React.createElement("div", { className: "page-in" }, page))), !isAdminRoute && /* @__PURE__ */ React.createElement("nav", { className: "tabbar", "aria-label": "Student navigation" }, navS.map((n) => /* @__PURE__ */ React.createElement("a", { key: n.to, href: href(n.to), className: n.fab ? "fab" : "", "aria-current": curAttr(n.to) }, n.fab ? /* @__PURE__ */ React.createElement("span", { className: "fab-i" }, /* @__PURE__ */ React.createElement(Icon, { name: n.icon, size: 22 })) : /* @__PURE__ */ React.createElement(Icon, { name: n.icon, size: 21 }), n.label, !!n.n && /* @__PURE__ */ React.createElement("span", { className: "dot" }, n.n)))), /* @__PURE__ */ React.createElement(ToastHost, null));
   }
   function App() {
     return /* @__PURE__ */ React.createElement(Provider, null, /* @__PURE__ */ React.createElement(Shell, null));
